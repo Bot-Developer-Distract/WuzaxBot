@@ -1,40 +1,47 @@
 const { Client, Intents, MessageActionRow, MessageSelectMenu, MessageEmbed, MessageButton } = require("discord.js");
 const client = new Client({intents: ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES"]});
+const { PermissionFlagsBits } = require('discord-api-types/v10');
 require("dotenv").config();
 
 client.on("ready", () => {
     console.log("Ready !");
-})
-
-client.on("messageCreate", message => {
-    if(message.content.startsWith("!verify")) {
-        message.delete()
-        if(!message.member.permissions.has("ADMINISTRATOR")) return message.reply({content: ":x: | Tu n'a pas la permissions"}).then((msg) => msg.delete(5000))
-        let button = new MessageButton().setCustomId("verify").setLabel("Verifier").setStyle("SUCCESS").setEmoji("✅")
-        let verifyButtons = new MessageActionRow()
-            .addComponents([button])
-        let embed = new MessageEmbed()
-        .setTitle(`😀 Bienvenue sur ${message.guild.name}`)
-        .setDescription("Ce serveur est le serveur communautaire de Wuzax\n\nPour vous verifiez veuillez cliquer sur le boutton `✅ Verifier` !")
-        .setFooter("Wuzax | © 2022", message.guild.iconURL())
-        message.channel.send({embeds: [embed], components: [verifyButtons]})
-    }
-
-    if(message.content.startsWith("!roles")) {
-        let giveawayButton = new MessageButton().setLabel("Giveaway").setCustomId("giveaway").setStyle("PRIMARY").setEmoji("🎉")
-        let annonceButton = new MessageButton().setLabel("Annonce").setCustomId("annonce").setStyle("PRIMARY").setEmoji("📌")
-        let rolesButtons = new MessageActionRow()
-            .addComponents([giveawayButton, annonceButton])
-        message.channel.send({components: [rolesButtons]})
-    }
+    let g = client.guilds.cache.get("868564194235142145")
+    g.commands.set([
+        {
+            name: "verify",
+            description: "send a verify menu",
+        },
+        {
+            name: "roles",
+            description: "send roles button",
+        }
+    ])
 })
 
 client.on("interactionCreate", async interaction => {
-    client.guilds.cache.forEach(async(x) => {
-        x.channels.cache.last().createInvite().then(async(v) => {
-
-        })
-    })
+    //Slash Commands
+    if(interaction.isCommand()) {
+        if(interaction.commandName === "verify") {
+            if(!interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({content: ":x: | Tu n'a pas la permissions", ephemeral: true})
+            let button = new MessageButton().setCustomId("verify").setLabel("Verifier").setStyle("SUCCESS").setEmoji("✅")
+            let verifyButtons = new MessageActionRow()
+                .addComponents([button])
+            let embed = new MessageEmbed()
+            .setTitle(`😀 Bienvenue sur ${interaction.guild.name}`)
+            .setDescription("Ce serveur est le serveur communautaire de Wuzax\n\nPour vous verifiez veuillez cliquer sur le boutton `✅ Verifier` !")
+            .setFooter("Wuzax | © 2022", interaction.guild.iconURL())
+            interaction.channel.send({embeds: [embed], components: [verifyButtons]})
+        }
+        if(interaction.commandName === "roles") {
+            if(!interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({content: ":x: | Tu n'a pas la permissions", ephemeral: true})
+            let giveawayButton = new MessageButton().setLabel("Giveaway").setCustomId("giveaway").setStyle("PRIMARY").setEmoji("🎉")
+            let annonceButton = new MessageButton().setLabel("Annonce").setCustomId("annonce").setStyle("PRIMARY").setEmoji("📌")
+            let rolesButtons = new MessageActionRow()
+                .addComponents([giveawayButton, annonceButton])
+            interaction.channel.send({components: [rolesButtons]})
+        }
+    }
+    // BUTTONS REACTIONS
     if(interaction.isButton()) {
         //Verify Button
         if(interaction.customId === "verify") {
