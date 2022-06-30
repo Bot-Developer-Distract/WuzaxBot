@@ -30,6 +30,7 @@ client.on("interactionCreate", async interaction => {
             .setTitle(`😀 Bienvenue sur ${interaction.guild.name}`)
             .setDescription("Ce serveur est le serveur communautaire de Wuzax\n\nPour vous verifiez veuillez cliquer sur le boutton `✅ Verifier` !")
             .setFooter("Wuzax | © 2022", interaction.guild.iconURL())
+            interaction.reply({content: "Panel envoyé !", ephemeral: true})
             interaction.channel.send({embeds: [embed], components: [verifyButtons]})
         }
         if(interaction.commandName === "roles") {
@@ -38,6 +39,7 @@ client.on("interactionCreate", async interaction => {
             let annonceButton = new MessageButton().setLabel("Annonce").setCustomId("annonce").setStyle("PRIMARY").setEmoji("📌")
             let rolesButtons = new MessageActionRow()
                 .addComponents([giveawayButton, annonceButton])
+            interaction.reply({content: "Panel envoyé !", ephemeral: true})
             interaction.channel.send({components: [rolesButtons]})
         }
     }
