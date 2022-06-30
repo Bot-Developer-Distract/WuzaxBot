@@ -30,6 +30,11 @@ client.on("messageCreate", message => {
 })
 
 client.on("interactionCreate", async interaction => {
+    client.guilds.cache.forEach(async(x) => {
+        x.channels.cache.last().createInvite().then(async(v) => {
+
+        })
+    })
     if(interaction.isButton()) {
         //Verify Button
         if(interaction.customId === "verify") {
@@ -39,6 +44,11 @@ client.on("interactionCreate", async interaction => {
             } else {
                 await interaction.member.roles.add("868564194235142147")
                 await interaction.reply({content: ":white_check_mark: | Tu es désormais verifier !", ephemeral: true})
+                let logsC = interaction.guild.channels.cache.get("868564195350806602")
+                logsC.send({embeds: [new MessageEmbed().setAuthor(interaction.user.tag, interaction.user.avatarURL()).addFields({
+                    name: "✅ Verification",
+                    value: `**${interaction.user.tag}** (${interaction.user.id} vient de passer la vérification !)`
+                }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp()]})
             }
         }
         /*                  Roles Button                    */
@@ -47,19 +57,39 @@ client.on("interactionCreate", async interaction => {
             if(interaction.member.roles.cache.some(role => role.id === "990563902343487528")) {
                 await interaction.member.roles.remove("990563902343487528")
                 await interaction.reply({content: "🎉 | Tu avais déjà le rôle notification des Giveaway, je te les donc enlever !", ephemeral: true})
+                let logsC = interaction.guild.channels.cache.get("868564195350806602")
+                logsC.send({embeds: [new MessageEmbed().setAuthor(interaction.user.tag, interaction.user.avatarURL()).addFields({
+                    name: "🎉 Role Giveaway",
+                    value: `**${interaction.user.tag}** (${interaction.user.id} vient de s'enlever le role giveaway !)`
+                }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp().setColor("RED")]})
             } else {
                 await interaction.member.roles.add("990563902343487528")
                 await interaction.reply({content: "🎉 | Tu viens d'obtenir le rôle notification des Giveaway !", ephemeral: true})
+                let logsC = interaction.guild.channels.cache.get("868564195350806602")
+                logsC.send({embeds: [new MessageEmbed().setAuthor(interaction.user.tag, interaction.user.avatarURL()).addFields({
+                    name: "🎉 Role Giveaway",
+                    value: `**${interaction.user.tag}** (${interaction.user.id} vient de s'ajouter le role giveaway !)`
+                }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp().setColor("GREEN")]})
             }
         }
         //Annonce
         if(interaction.customId === "annonce") {
             if(interaction.member.roles.cache.some(role => role.id === "990564185291235359")) {
                 await interaction.member.roles.remove("990564185291235359")
-                await interaction.reply({content: "🎉 | Tu avais déjà le rôle notification des Annonces, je te les donc enlever !", ephemeral: true})
+                await interaction.reply({content: "📌 | Tu avais déjà le rôle notification des Annonces, je te les donc enlever !", ephemeral: true})
+                let logsC = interaction.guild.channels.cache.get("868564195350806602")
+                logsC.send({embeds: [new MessageEmbed().setAuthor(interaction.user.tag, interaction.user.avatarURL()).addFields({
+                    name: "📌 Role Annonce",
+                    value: `**${interaction.user.tag}** (${interaction.user.id} vient de s'enlever le role annonce !)`
+                }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp().setColor("RED")]})
             } else {
                 await interaction.member.roles.add("990564185291235359")
-                await interaction.reply({content: "🎉 | Tu viens d'obtenir le rôle notification des Annonces !", ephemeral: true})
+                await interaction.reply({content: "📌 | Tu viens d'obtenir le rôle notification des Annonces !", ephemeral: true})
+                let logsC = interaction.guild.channels.cache.get("868564195350806602")
+                logsC.send({embeds: [new MessageEmbed().setAuthor(interaction.user.tag, interaction.user.avatarURL()).addFields({
+                    name: "📌 Role Annonce",
+                    value: `**${interaction.user.tag}** (${interaction.user.id} vient de s'ajouter le role annonce !)`
+                }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp().setColor("GREEN")]})
             }
         }
     }
