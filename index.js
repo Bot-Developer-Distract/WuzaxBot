@@ -5,6 +5,7 @@ require("dotenv").config();
 
 client.on("ready", () => {
     console.log("Ready !");
+    //Slash Commands
     let g = client.guilds.cache.get("868564194235142145")
     g.commands.set([
         {
@@ -103,5 +104,5 @@ client.on("interactionCreate", async interaction => {
         }
     }
 })
-
+//Login
 client.login(process.env.TOKEN)
