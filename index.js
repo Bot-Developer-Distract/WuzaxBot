@@ -47,7 +47,7 @@ client.on("interactionCreate", async interaction => {
                 let logsC = interaction.guild.channels.cache.get("868564195350806602")
                 logsC.send({embeds: [new MessageEmbed().setAuthor(interaction.user.tag, interaction.user.avatarURL()).addFields({
                     name: "✅ Verification",
-                    value: `**${interaction.user.tag}** (${interaction.user.id} vient de passer la vérification !)`
+                    value: `**${interaction.user.tag}** (${interaction.user.id}) vient de passer la vérification !`
                 }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp().setColor("GREEN")]})
             }
         }
@@ -60,7 +60,7 @@ client.on("interactionCreate", async interaction => {
                 let logsC = interaction.guild.channels.cache.get("868564195350806602")
                 logsC.send({embeds: [new MessageEmbed().setAuthor(interaction.user.tag, interaction.user.avatarURL()).addFields({
                     name: "🎉 Role Giveaway",
-                    value: `**${interaction.user.tag}** (${interaction.user.id} vient de s'enlever le role giveaway !)`
+                    value: `**${interaction.user.tag}** (${interaction.user.id}) vient de s'enlever le role giveaway !`
                 }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp().setColor("RED")]})
             } else {
                 await interaction.member.roles.add("990563902343487528")
@@ -68,7 +68,7 @@ client.on("interactionCreate", async interaction => {
                 let logsC = interaction.guild.channels.cache.get("868564195350806602")
                 logsC.send({embeds: [new MessageEmbed().setAuthor(interaction.user.tag, interaction.user.avatarURL()).addFields({
                     name: "🎉 Role Giveaway",
-                    value: `**${interaction.user.tag}** (${interaction.user.id} vient de s'ajouter le role giveaway !)`
+                    value: `**${interaction.user.tag}** (${interaction.user.id}) vient de s'ajouter le role giveaway !`
                 }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp().setColor("GREEN")]})
             }
         }
@@ -80,7 +80,7 @@ client.on("interactionCreate", async interaction => {
                 let logsC = interaction.guild.channels.cache.get("868564195350806602")
                 logsC.send({embeds: [new MessageEmbed().setAuthor(interaction.user.tag, interaction.user.avatarURL()).addFields({
                     name: "📌 Role Annonce",
-                    value: `**${interaction.user.tag}** (${interaction.user.id} vient de s'enlever le role annonce !)`
+                    value: `**${interaction.user.tag}** (${interaction.user.id}) vient de s'enlever le role annonce !`
                 }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp().setColor("RED")]})
             } else {
                 await interaction.member.roles.add("990564185291235359")
@@ -88,7 +88,7 @@ client.on("interactionCreate", async interaction => {
                 let logsC = interaction.guild.channels.cache.get("868564195350806602")
                 logsC.send({embeds: [new MessageEmbed().setAuthor(interaction.user.tag, interaction.user.avatarURL()).addFields({
                     name: "📌 Role Annonce",
-                    value: `**${interaction.user.tag}** (${interaction.user.id} vient de s'ajouter le role annonce !)`
+                    value: `**${interaction.user.tag}** (${interaction.user.id}) vient de s'ajouter le role annonce !`
                 }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp().setColor("GREEN")]})
             }
         }
