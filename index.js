@@ -48,7 +48,7 @@ client.on("interactionCreate", async interaction => {
                 logsC.send({embeds: [new MessageEmbed().setAuthor(interaction.user.tag, interaction.user.avatarURL()).addFields({
                     name: "✅ Verification",
                     value: `**${interaction.user.tag}** (${interaction.user.id} vient de passer la vérification !)`
-                }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp()]})
+                }).setFooter(interaction.guild.name, interaction.guild.iconURL()).setTimestamp().setColor("GREEN")]})
             }
         }
         /*                  Roles Button                    */
