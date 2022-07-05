@@ -56,6 +56,10 @@ client.on("ready", () => {
                     required: true
                 }  
             ]
+        },
+        {
+            name: "shop",
+            description: "shop command"
         }
     ])
 })
@@ -63,6 +67,7 @@ client.on("ready", () => {
 client.on("interactionCreate", async interaction => {
     //Slash Commands
     if(interaction.isCommand()) {
+        console.log(interaction.commandName)
         if(interaction.commandName === "verify") {
             if(!interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({content: ":x: | Tu n'a pas la permissions", ephemeral: true})
             let button = new MessageButton().setCustomId("verify").setLabel("Verifier").setStyle("SUCCESS").setEmoji("✅")
@@ -123,6 +128,20 @@ client.on("interactionCreate", async interaction => {
                     ], ephemeral: true
                 })
             }
+        }
+        if(interaction.commandName === "shop") {
+            let buttonShop = new MessageButton().setLabel("Commander").setCustomId("shop.cmd").setStyle("PRIMARY").setEmoji("🛒")
+            let shopButton = new MessageActionRow()
+                .addComponents([buttonShop])
+            let embed = new MessageEmbed()
+            .setTitle("Wuzax - Boutique")
+            .setDescription("Vous voulez votre propre bot discord ? Vous etes au bonne endroit.\nTous les codes peuvent etre choisi en slash comamnd ou commande normal avec prefix, avec boutton ou réaction !\nLe paiement se fait **uniquement par paypal** !")
+            .addField("➤ Codes", "> `Reaction Role (Button/Reaction)` ✪ **1€**\n> `Giveaway` ✪ **2€**\n> `Economy Bot` ✪ **2€**\n> `Ticket Bot (Panel/Commandes)` ✪ **4€**\n> `Music` ✪ **5€**\n> `Manage Invite` ✪ **8€**")
+            .addField("➤ Custom Bot", "Vous pouvez commander un bot custom, **le prix sera en fonction de la commande**.")
+            .setColor("RED")
+            .setFooter("© Copyright 2022 - Wuzax - Community")
+            interaction.reply({content: "Message envoyé !", ephemeral: true })
+            interaction.channel.send({embeds: [embed], components: [shopButton]})
         }
     }
     // BUTTONS REACTIONS
@@ -272,7 +291,7 @@ client.on("interactionCreate", async interaction => {
                     const attachments = await createTranscript(interaction.channel, {
                         limit: -1,
                         returnBuffer: false,
-                        fileName: `${interaction.channel.name} - Transcript.html`,
+                        fileName: `${interaction.channel.name} Transcript.html`,
                     })
                     let EMBED = new MessageEmbed()
                     .setColor("WHITE")
@@ -304,6 +323,36 @@ client.on("interactionCreate", async interaction => {
                     }, 5000)
                 }
             }, 2000)
+        }
+        //SHOP
+        if(interaction.customId === "shop.cmd") {
+            if(interaction.guild.channels.cache.find((c) => c.name === `boutique-${interaction.user.username}`)) return interaction.reply({content: ":x: | Vous avez déja une commande d'ouverte !", ephemeral: true })
+            let channel = await interaction.guild.channels.create(`boutique - ${interaction.user.username}`, {
+                parent: "993816901497126973",
+                reason: `${interaction.user.tag} créé une commande`,
+                type: "GUILD_TEXT"
+            });
+            channel.permissionOverwrites.edit(interaction.user.id, {
+                ATTACH_FILES: true,
+                READ_MESSAGE_HISTORY: true,
+                SEND_MESSAGES: true,
+                VIEW_CHANNEL: true
+            }, `commande créé par ${interaction.user.tag}`)
+            channel.permissionOverwrites.edit(interaction.guild.id, {
+                VIEW_CHANNEL: false
+            }, `commande créé par ${interaction.user.tag}`)
+            let cID = channel.id
+            let code = new MessageButton().setCustomId("shop.code.panel").setLabel("Codes").setStyle("PRIMARY").setEmoji("⚙️")
+            let custom = new MessageButton().setCustomId("shop.custom.panel").setLabel("Custom").setStyle("PRIMARY").setEmoji("🛠️")
+            let button = new MessageActionRow()
+                .addComponents([code, custom])
+            let embed = new MessageEmbed()
+            .setTitle("Wuzax | Boutique")
+            .setDescription(`Bienvenue ${interaction.user} dans votre commande !\n\nMerci de chosir si vous souhaitez commander un code ou un bot custom en .\nPour fermer cette commande cliquer sur le bouton \`⛔ Close\``)
+            .setFooter("© Copyright 2022 - Wuzax - Community")
+            .setColor("WHITE")
+            channel.send({content: `${interaction.user} voici votre commande !`, embeds: [embed], components: [button]})
+            interaction.reply({content: `Votre commande a été créé <#${cID}>`, ephemeral: true })
         }
     }
 })
