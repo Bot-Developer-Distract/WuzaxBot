@@ -60,6 +60,10 @@ client.on("ready", () => {
         {
             name: "shop",
             description: "shop command"
+        },
+        {
+            name: "close",
+            description: "close commande",
         }
     ])
 })
@@ -67,7 +71,6 @@ client.on("ready", () => {
 client.on("interactionCreate", async interaction => {
     //Slash Commands
     if(interaction.isCommand()) {
-        console.log(interaction.commandName)
         if(interaction.commandName === "verify") {
             if(!interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({content: ":x: | Tu n'a pas la permissions", ephemeral: true})
             let button = new MessageButton().setCustomId("verify").setLabel("Verifier").setStyle("SUCCESS").setEmoji("✅")
@@ -140,8 +143,16 @@ client.on("interactionCreate", async interaction => {
             .addField("➤ Custom Bot", "Vous pouvez commander un bot custom, **le prix sera en fonction de la commande**.")
             .setColor("RED")
             .setFooter("© Copyright 2022 - Wuzax - Community")
-            interaction.reply({content: "Message envoyé !", ephemeral: true })
             interaction.channel.send({embeds: [embed], components: [shopButton]})
+            interaction.reply({content: "Message envoyé !", ephemeral: true })
+        }
+        if(interaction.commandName === "close") {
+            if(!interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({content: ":x: | Tu n'a pas la permissions", ephemeral: true})
+            if(interaction.channel.name.includes("boutique")) {
+                await interaction.channel.delete()
+            } else {
+                interaction.reply({content: ":x: | Ce n'est pas un channel boutique", ephemeral: true})
+            }
         }
     }
     // BUTTONS REACTIONS
@@ -248,7 +259,7 @@ client.on("interactionCreate", async interaction => {
             .setColor("WHITE")
             channel.send({content: `${interaction.user} voici votre ticket !`, embeds: [embed], components: [ticket_close]})
             interaction.reply({content: `Votre ticket a été créé <#${cID}>`, ephemeral: true })
-        }
+        } else
         if(interaction.customId === `ticket.claim.${interaction.channel.id}`) {
             if(interaction.channel.name.includes("claimed")) return interaction.reply({content: "Ticket deja claim !", ephemeral: true })
             interaction.reply({content: `Vous avez bien claim le ticket ${interaction.channel.name} !`, ephemeral: true })
@@ -256,14 +267,14 @@ client.on("interactionCreate", async interaction => {
             interaction.channel.permissionOverwrites.edit("868564194537119826", { VIEW_CHANNEL: false })
             interaction.channel.permissionOverwrites.edit(interaction.user.id, { VIEW_CHANNEL: true, SEND_MESSAGES: true })
             interaction.channel.setName(`claimed-${interaction.channel.name}`)
-        }
+        } else
         if(interaction.customId === `ticket.unclaim.${interaction.channel.id}`) {
             interaction.reply({content: `Vous avez bien unclaim le ticket ${interaction.channel.name} !`, ephemeral: true })
             interaction.channel.send({content: `Votre ticket a été unclaim !`})
             interaction.channel.permissionOverwrites.edit("868564194537119826", { VIEW_CHANNEL: true, SEND_MESSAGES: true })
             interaction.channel.permissionOverwrites.edit(interaction.user.id, { VIEW_CHANNEL: null })
             interaction.channel.setName(interaction.channel.name.replace("claimed", ""))
-        }
+        } else
         if(interaction.customId === `ticket.close.${interaction.channel.id}`) {
             let yesButton = new MessageButton().setLabel("Oui").setCustomId(`ticket.yes.${interaction.channel.id}`).setStyle("SUCCESS").setEmoji("✅")
             let noButton = new MessageButton().setLabel("Non").setCustomId(`ticket.no.${interaction.channel.id}`).setStyle("DANGER").setEmoji("❌")
@@ -275,10 +286,10 @@ client.on("interactionCreate", async interaction => {
             .setFooter("© Copyright 2022 - Wuzax - Community")
             .setColor("WHITE")
             interaction.reply({embeds: [confirmEmbed], components: [confirmButtons], ephemeral: true })
-        }
+        } else
         if(interaction.customId === `ticket.no.${interaction.channel.id}`) {
             interaction.reply({content: "✅ | Annulation de la supprésion du ticket !", ephemeral: true })
-        }
+        } else
 
         if(interaction.customId === `ticket.yes.${interaction.channel.id}`) {
             if(interaction.channel.name.includes("claimed")) {
@@ -323,7 +334,7 @@ client.on("interactionCreate", async interaction => {
                     }, 5000)
                 }
             }, 2000)
-        }
+        } else
         //SHOP
         if(interaction.customId === "shop.cmd") {
             if(interaction.guild.channels.cache.find((c) => c.name === `boutique-${interaction.user.username}`)) return interaction.reply({content: ":x: | Vous avez déja une commande d'ouverte !", ephemeral: true })
@@ -348,11 +359,153 @@ client.on("interactionCreate", async interaction => {
                 .addComponents([code, custom])
             let embed = new MessageEmbed()
             .setTitle("Wuzax | Boutique")
-            .setDescription(`Bienvenue ${interaction.user} dans votre commande !\n\nMerci de chosir si vous souhaitez commander un code ou un bot custom en .\nPour fermer cette commande cliquer sur le bouton \`⛔ Close\``)
+            .setDescription(`Bienvenue ${interaction.user} dans votre commande !\n\nMerci de chosir si vous souhaitez commander un code ou un bot custom en cliquant sur les boutton:\n\`⚙️ Codes\` pour choisir de commandes un codes\n\`🛠️ Custom\` pour soumettre une demande de bot custom\nPour fermer cette commande cliquer sur le bouton \`⛔ Close\``)
             .setFooter("© Copyright 2022 - Wuzax - Community")
             .setColor("WHITE")
             channel.send({content: `${interaction.user} voici votre commande !`, embeds: [embed], components: [button]})
             interaction.reply({content: `Votre commande a été créé <#${cID}>`, ephemeral: true })
+        }
+        if(interaction.customId === "shop.custom.panel") {
+            await interaction.channel.bulkDelete(1)
+            let embed = new MessageEmbed()
+            .setTitle("Wuzax | Boutique")
+            .addField("Author", `${interaction.user.tag} (${interaction.user.id})`)
+            .addField("Commande", "Custom")
+            .setFooter("© Copyright 2022 - Wuzax - Community")
+            .setColor("WHITE")
+            await interaction.channel.send({content: "<@&994265592687251476>", embeds: [embed]})
+            await interaction.reply({content: "Veuillez décrire un maximum le bot que vous souhaitez, en cas de problème ou de question un administrateur vous en fera part!", ephemeral: true })
+        }
+        if(interaction.customId === "shop.code.panel") {
+            const row = new MessageActionRow()
+                .addComponents(
+                    new MessageSelectMenu()
+                    .setCustomId("shop.code.select")
+                    .setPlaceholder("Choisir un code")
+                    .addOptions([
+                        {
+                            label: "Reaction Role (Button/Reaction) ✪ 1€",
+                            description: "Permet d'ajouté un roles en cliquant sur un boutton",
+                            value: "code.reactrole"
+                        },
+                        {
+                            label: "Giveaway ✪ 2€",
+                            description: "Permet de faire un giveaway (complet)",
+                            value: "code.giveaway"
+                        },
+                        {
+                            label: "Economy Bot ✪ 2€",
+                            description: "Permet de faire un bot d'economie",
+                            value: "code.economy",
+                        },
+                        {
+                            label: "Ticket Bot (Panel/Commandes) ✪ 4€",
+                            description: "Permet de faire un bot de ticket",
+                            value: "code.ticket"
+                        },
+                        {
+                            label: "Music ✪ 5€",
+                            description: "Permet de faire un bot de musique",
+                            value: "code.music"
+                        },
+                        {
+                            label: "Manage Invite ✪ 8€",
+                            description: "Permet de gérer les invites",
+                            value: "code.invite"
+                        }
+                    ])
+                )
+            let embed = new MessageEmbed()
+            .setTitle("Wuzax | Codes")
+            .setDescription("Merci de choisir un code en cliquant sur le boutton correspondant")
+            .setFooter("© Copyright 2022 - Wuzax - Community")
+            .setColor("WHITE")
+            interaction.reply({content: "Veuillez patienter...", ephemeral: true })
+            setTimeout(() => {
+                interaction.channel.send({embeds: [embed], components: [row]})
+            }, 500)
+        }
+    }
+    if(interaction.isSelectMenu()) {
+        if(interaction.customId === "shop.code.select") {
+            if(interaction.values == "code.reactrole") {
+                await interaction.channel.bulkDelete(3)
+                let embed = new MessageEmbed()
+                .setTitle("Wuzax | Codes")
+                .setDescription(`Veuillez patienter un administateur.`)
+                .addField("Author", `${interaction.user.tag} (${interaction.user.id})`)
+                .addField("Commande", "Code")
+                .addField("Code", "Reaction Role")
+                .addField("Prix", "1€")
+                .setFooter("© Copyright 2022 - Wuzax - Community")
+                .setColor("WHITE")
+                interaction.channel.send({content: "<@&994265592687251476>", embeds: [embed]})
+            }
+            if(interaction.values == "code.giveaway") {
+                await interaction.channel.bulkDelete(3)
+                let embed = new MessageEmbed()
+                .setTitle("Wuzax | Codes")
+                .setDescription(`Veuillez patienter un administateur.`)
+                .addField("Author", `${interaction.user.tag} (${interaction.user.id})`)
+                .addField("Commande", "Code")
+                .addField("Code", "Giveaway")
+                .addField("Prix", "2€")
+                .setFooter("© Copyright 2022 - Wuzax - Community")
+                .setColor("WHITE")
+                interaction.channel.send({content: "<@&994265592687251476>", embeds: [embed]})
+            }
+            if(interaction.values == "code.economy") {
+                await interaction.channel.bulkDelete(3)
+                let embed = new MessageEmbed()
+                .setTitle("Wuzax | Codes")
+                .setDescription(`Veuillez patienter un administateur.`)
+                .addField("Author", `${interaction.user.tag} (${interaction.user.id})`)
+                .addField("Commande", "Code")
+                .addField("Code", "Economy Bot")
+                .addField("Prix", "2€")
+                .setFooter("© Copyright 2022 - Wuzax - Community")
+                .setColor("WHITE")
+                interaction.channel.send({content: "<@&994265592687251476>", embeds: [embed]})
+            }
+            if(interaction.values == "code.ticket") {
+                await interaction.channel.bulkDelete(3)
+                let embed = new MessageEmbed()
+                .setTitle("Wuzax | Codes")
+                .setDescription(`Veuillez patienter un administateur.`)
+                .addField("Author", `${interaction.user.tag} (${interaction.user.id})`)
+                .addField("Commande", "Code")
+                .addField("Code", "Ticket Bot")
+                .addField("Prix", "4€")
+                .setFooter("© Copyright 2022 - Wuzax - Community")
+                .setColor("WHITE")
+                interaction.channel.send({content: "<@&994265592687251476>", embeds: [embed]})
+            }
+            if(interaction.values == "code.music") {
+                await interaction.channel.bulkDelete(3)
+                let embed = new MessageEmbed()
+                .setTitle("Wuzax | Codes")
+                .setDescription(`Veuillez patienter un administateur.`)
+                .addField("Author", `${interaction.user.tag} (${interaction.user.id})`)
+                .addField("Commande", "Code")
+                .addField("Code", "Music")
+                .addField("Prix", "5€")
+                .setFooter("© Copyright 2022 - Wuzax - Community")
+                .setColor("WHITE")
+                interaction.channel.send({content: "<@&994265592687251476>", embeds: [embed]})
+            }
+            if(interaction.values == "code.invite") {
+                await interaction.channel.bulkDelete(3)
+                let embed = new MessageEmbed()
+                .setTitle("Wuzax | Codes")
+                .setDescription(`Veuillez patienter un administateur.`)
+                .addField("Author", `${interaction.user.tag} (${interaction.user.id})`)
+                .addField("Commande", "Code")
+                .addField("Code", "Manage Invite")
+                .addField("Prix", "8€")
+                .setFooter("© Copyright 2022 - Wuzax - Community")
+                .setColor("WHITE")
+                interaction.channel.send({content: "<@&994265592687251476>", embeds: [embed]})
+            }
         }
     }
 })
