@@ -13,6 +13,7 @@
   "author": "wuzax",
   "license": "ISC",
   "dependencies": {
+    "@androz2091/discord-invites-tracker": "^1.1.1",
     "discord-html-transcripts": "^2.5.8",
     "discord-logs": "^2.0.1",
     "discord.js": "^13.8.1",

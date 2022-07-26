@@ -6,8 +6,47 @@ const { createTranscript } = require("discord-html-transcripts")
 const fs = require('fs')
 const bdd = require("./bdd.json")
 const logs = require('discord-logs');
+const InvitesTracker = require('@androz2091/discord-invites-tracker');
+const tracker = InvitesTracker.init(client, {
+    fetchGuilds: true,
+    fetchVanity: true,
+    fetchAuditLogs: true
+});
+let { sendLogs } = require("./functions")
 logs(client);
 require('./logs')(client)
+
+tracker.on('guildMemberAdd', (member, type, invite) => {
+
+    const welcomeChannel = member.guild.channels.cache.find((ch) => ch.id === '991780665324474548');
+
+    if(type === 'normal'){
+        welcomeChannel.send(`Bienvenue ${member}! Tu a été invité par ${invite.inviter.tag} (${invite.uses} Invitations)!`);
+        sendLogs(member.guild, "Member", `${member.user.tag} vient de rejoindre le serveur`)
+        sendLogs(member.guild, "Member", `${invite.inviter.tag} vient d'inviter ${member.user.tag} sur le serveur, il a ${invite.uses} invitations`)
+    }
+
+    else if(type === 'vanity'){
+        welcomeChannel.send(`Bienvenue ${member}! Vous avez rejoint en utilisant une invitation personnalisée !`);
+        sendLogs(member.guild, "Member", `${member.user.tag} vient de rejoindre le serveur`)
+    }
+
+    else if(type === 'permissions'){
+        welcomeChannel.send(`Bienvenue ${member}! Je n'arrive pas à comprendre comment vous vous avez rejoint parce que je n'ai pas l'autorisation de "Manage Server" !`);
+        sendLogs(member.guild, "Member", `${member.user.tag} vient de rejoindre le serveur`)
+    }
+
+    else if(type === 'unknown'){
+        welcomeChannel.send(`Bienvenue ${member}! Je n'arrive pas à comprendre comment vous avez rejoint le serveur...`);
+        sendLogs(member.guild, "Member", `${member.user.tag} vient de rejoindre le serveur`)
+    }
+
+});
+
+client.on("guildMemberRemove", (member) => {
+    const welcomeChannel = member.guild.channels.cache.find((ch) => ch.id === '991780665324474548');
+    welcomeChannel.send(`Dommage ${member.user.tag} vient de quitter le serveur !`)
+})
 
 client.on("ready", () => {
     console.log("Ready !");
@@ -65,6 +104,27 @@ client.on("ready", () => {
         {
             name: "close",
             description: "close commande",
+        },
+        {
+            name: "emit",
+            description: "Emit event",
+            options: [
+                {
+                    name: "event",
+                    description: "Select a event for emit",
+                    type: "STRING",
+                    choices: [
+                        {
+                            name: "guildMemberAdd",
+                            value: "guildMemberAdd"
+                        },
+                        {
+                            name: "guildMemberRemove",
+                            value: "guildMemberRemove"
+                        }
+                    ]
+                }
+            ]
         }
     ])
 })
@@ -153,6 +213,16 @@ client.on("interactionCreate", async interaction => {
                 await interaction.channel.delete()
             } else {
                 interaction.reply({content: ":x: | Ce n'est pas un channel boutique", ephemeral: true})
+            }
+        }
+        if(interaction.commandName === "emit") {
+            let event = interaction.options.getString("event")
+            if(event === "guildMemberAdd") {
+                client.emit("guildMemberAdd", interaction.member)
+                interaction.reply({content: `${event} a bien été émit !`, ephemeral: true })
+            } else if(event === "guildMemberRemove") {
+                client.emit("guildMemberRemove", interaction.member)
+                interaction.reply({content: `${event} a bien été émit !`, ephemeral: true })
             }
         }
     }
