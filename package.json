@@ -13,7 +13,6 @@
   "author": "wuzax",
   "license": "ISC",
   "dependencies": {
-    "better-sqlite3": "^7.5.3",
     "discord-html-transcripts": "^2.5.8",
     "discord-logs": "^2.0.1",
     "discord.js": "^13.8.1",
