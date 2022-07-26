@@ -46,6 +46,7 @@ tracker.on('guildMemberAdd', (member, type, invite) => {
 client.on("guildMemberRemove", (member) => {
     const welcomeChannel = member.guild.channels.cache.find((ch) => ch.id === '991780665324474548');
     welcomeChannel.send(`Dommage ${member.user.tag} vient de quitter le serveur !`)
+    sendLogs(member.guild, "Member", `${member.user.tag} vient de quitté le serveur`)
 })
 
 client.on("ready", () => {
@@ -218,7 +219,7 @@ client.on("interactionCreate", async interaction => {
         if(interaction.commandName === "emit") {
             let event = interaction.options.getString("event")
             if(event === "guildMemberAdd") {
-                client.emit("guildMemberAdd", interaction.member)
+                client.emit("guildMemberAdd", interaction.member, "normal", interaction.user)
                 interaction.reply({content: `${event} a bien été émit !`, ephemeral: true })
             } else if(event === "guildMemberRemove") {
                 client.emit("guildMemberRemove", interaction.member)
