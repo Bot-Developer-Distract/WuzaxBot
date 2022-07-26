@@ -2,8 +2,6 @@ const { Client, Intents, MessageActionRow, MessageSelectMenu, MessageEmbed, Mess
 const client = new Client({intents: ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES"]});
 const { PermissionFlagsBits } = require('discord-api-types/v10');
 require("dotenv").config();
-const { QuickDB } = require("quick.db")
-const db = new QuickDB()
 const { createTranscript } = require("discord-html-transcripts")
 const fs = require('fs')
 const bdd = require("./bdd.json")
