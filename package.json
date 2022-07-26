@@ -15,7 +15,7 @@
   "dependencies": {
     "discord-html-transcripts": "^2.5.8",
     "discord-logs": "^2.0.1",
-    "discord.js": "^13.8.1",
+    "discord.js": "^14.0.3",
     "dotenv": "^16.0.1",
     "fs": "^0.0.1-security",
     "quick.db": "^9.0.5"
