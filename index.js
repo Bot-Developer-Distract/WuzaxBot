@@ -7,6 +7,9 @@ const db = new QuickDB()
 const { createTranscript } = require("discord-html-transcripts")
 const fs = require('fs')
 const bdd = require("./bdd.json")
+const logs = require('discord-logs');
+logs(client);
+require('./logs')(client)
 
 client.on("ready", () => {
     console.log("Ready !");
