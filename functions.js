@@ -1,3 +1,5 @@
+const { MessageEmbed } = require("discord.js")
+
 module.exports = {
     sendLogs(guild, type, description) {
         let embed = new MessageEmbed()

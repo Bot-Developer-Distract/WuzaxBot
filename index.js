@@ -219,7 +219,7 @@ client.on("interactionCreate", async interaction => {
         if(interaction.commandName === "emit") {
             let event = interaction.options.getString("event")
             if(event === "guildMemberAdd") {
-                client.emit("guildMemberAdd", interaction.member, "normal", interaction.user)
+                client.emit("guildMemberAdd", interaction.member)
                 interaction.reply({content: `${event} a bien été émit !`, ephemeral: true })
             } else if(event === "guildMemberRemove") {
                 client.emit("guildMemberRemove", interaction.member)
