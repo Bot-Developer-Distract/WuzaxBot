@@ -5,7 +5,6 @@ require("dotenv").config();
 const { createTranscript } = require("discord-html-transcripts")
 const fs = require('fs')
 const bdd = require("./bdd.json")
-const logs = require('discord-logs');
 const InvitesTracker = require('@androz2091/discord-invites-tracker');
 const tracker = InvitesTracker.init(client, {
     fetchGuilds: true,
@@ -13,8 +12,6 @@ const tracker = InvitesTracker.init(client, {
     fetchAuditLogs: true
 });
 let { sendLogs } = require("./functions")
-logs(client);
-require('./logs')(client)
 
 tracker.on('guildMemberAdd', (member, type, invite) => {
 
