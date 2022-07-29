@@ -5,40 +5,14 @@ require("dotenv").config();
 const { createTranscript } = require("discord-html-transcripts")
 const fs = require('fs')
 const bdd = require("./bdd.json")
-const InvitesTracker = require('@androz2091/discord-invites-tracker');
-const tracker = InvitesTracker.init(client, {
-    fetchGuilds: true,
-    fetchVanity: true,
-    fetchAuditLogs: true
-});
+
 let { sendLogs } = require("./functions")
 
-tracker.on('guildMemberAdd', (member, type, invite) => {
-
+client.on("guildMemberAdd", (member) => {
     const welcomeChannel = member.guild.channels.cache.find((ch) => ch.id === '991780665324474548');
-
-    if(type === 'normal'){
-        welcomeChannel.send(`Bienvenue ${member}! Tu a été invité par ${invite.inviter.tag} (${invite.uses} Invitations)!`);
-        sendLogs(member.guild, "Member", `${member.user.tag} vient de rejoindre le serveur`)
-        sendLogs(member.guild, "Member", `${invite.inviter.tag} vient d'inviter ${member.user.tag} sur le serveur, il a ${invite.uses} invitations`)
-    }
-
-    else if(type === 'vanity'){
-        welcomeChannel.send(`Bienvenue ${member}! Vous avez rejoint en utilisant une invitation personnalisée !`);
-        sendLogs(member.guild, "Member", `${member.user.tag} vient de rejoindre le serveur`)
-    }
-
-    else if(type === 'permissions'){
-        welcomeChannel.send(`Bienvenue ${member}! Je n'arrive pas à comprendre comment vous vous avez rejoint parce que je n'ai pas l'autorisation de "Manage Server" !`);
-        sendLogs(member.guild, "Member", `${member.user.tag} vient de rejoindre le serveur`)
-    }
-
-    else if(type === 'unknown'){
-        welcomeChannel.send(`Bienvenue ${member}! Je n'arrive pas à comprendre comment vous avez rejoint le serveur...`);
-        sendLogs(member.guild, "Member", `${member.user.tag} vient de rejoindre le serveur`)
-    }
-
-});
+    welcomeChannel.send(`${member.user.tag} vient de rejoindre le serveur`)
+    sendLogs(member.guild, "Member", `${member.user.tag} vient de rejoindre le serveur`)
+})
 
 client.on("guildMemberRemove", (member) => {
     const welcomeChannel = member.guild.channels.cache.find((ch) => ch.id === '991780665324474548');
