@@ -41,7 +41,7 @@ module.exports = {
             await DB.updateOne({ ChannelID: channel.id}, { Locked: false });
             data.MembersID.forEach((m) => {
                 channel.permissionOverwrites.edit(m, {
-                    SendMessages: false,
+                    SendMessages: true,
                 });
             });
             Embed.setDescription(`:white_check_mark: This ticket has been unlocked`).setColor("Green");
