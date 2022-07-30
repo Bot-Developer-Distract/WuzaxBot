@@ -1,6 +1,7 @@
 const { ButtonInteraction, EmbedBuilder, MessageActionRow, MessageButton, PermissionFlagsBits, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require(`discord.js`);
 const DB = require("../../Schemas/TicketDB");
 const TicketSetupData = require("../../Schemas/TicketSetup");
+const { createTranscript } = require('discord-html-transcripts');
 
 module.exports = {
     id: `close`,
