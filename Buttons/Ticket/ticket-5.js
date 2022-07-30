@@ -33,6 +33,28 @@ module.exports = {
             ],
             
         }).then(async channel => {
+            let button = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                .setCustomId("close")
+                .setLabel("Close")
+                .setStyle(ButtonStyle.Danger)
+                .setEmoji("⛔")
+            )
+            .addComponents(
+                new ButtonBuilder()
+                .setCustomId("lock")
+                .setLabel("Lock")
+                .setStyle(ButtonStyle.Primary)
+                .setEmoji("🔒")
+            )
+            .addComponents(
+                new ButtonBuilder()
+                .setCustomId("unlock")
+                .setLabel("Unlock")
+                .setStyle(ButtonStyle.Primary)
+                .setEmoji("🔓")
+            )
             await DB.create({
                 GuildID: guild.id,
                 MembersID: member.id,
@@ -52,7 +74,8 @@ module.exports = {
                 .setDescription(`Ticket Created by <@${interaction.user.id}>\n\nPlease wait patiently for a response from the Staff team, in the meanwhile, please describe your issue or report in as much detail as possible.`);
             channel.send({
                 embeds: [Embed],
-                content: `<@${interaction.user.id}>`
+                content: `<@${interaction.user.id}>`,
+                components: [button]
             });
 
             await interaction.reply({content: `${member} your ticket has been created: ${channel}`, ephemeral: true});
