@@ -8,7 +8,7 @@ module.exports = {
      * @param {ButtonInteraction} interaction
      */
     async execute(interaction) {
-        const { guild, member, customId } = interaction;
+        const { guildId, options, channel, guild, member } = interaction;
         DB.findOne({ChannelID: channel.id}, async (err, data) => {
             if (err) throw err;
             if (!data) {
