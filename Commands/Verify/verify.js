@@ -11,7 +11,7 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction
      */
     async execute(interaction, client) {
-        await client.emit("guildMemberAdd", interaction.member)
+        await client.emit("guildMemberRemove", interaction.member)
         await interaction.reply({content: "Test"})
     }
 }
