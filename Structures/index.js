@@ -71,7 +71,7 @@ captcha.on("prompt", async(data) => {
     })
 })
 
-captcha.on("success", data => {
+captcha.on("success", async data => {
     if(!data.member.guild.id === "868564194235142145") return;
     let logsC = client.channels.cache.get("868564195350806602")
     let embed = new EmbedBuilder()
