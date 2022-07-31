@@ -11,6 +11,7 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction
      */
     async execute(interaction, client) {
+        ComponentType.SelectMenu
         if(!interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({content: ":x: | Tu n'a pas la permissions", ephemeral: true})
         if(interaction.channel.name.includes("boutique")) {
             await interaction.channel.delete()
