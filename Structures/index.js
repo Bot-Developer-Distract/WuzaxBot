@@ -1,4 +1,4 @@
-const { Client, Partials, Collection, EmbedBuilder } = require("discord.js")
+const { Client, Partials, Collection, EmbedBuilder, ThreadManager, ThreadChannel } = require("discord.js")
 const ms = require("ms")
 const { promisify } = require("util")
 const { glob } = require("glob")
