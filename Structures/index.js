@@ -37,7 +37,7 @@ client.on("guildMemberAdd", (member) => {
     captcha.present(member)
 })
 
-captcha.on("prompt", (data) => {
+captcha.on("prompt", async(data) => {
     if(!data.member.guild.id === "868564194235142145") return;
     let logsC = client.channels.cache.get("868564195350806602")
     let embed = new EmbedBuilder()
@@ -50,6 +50,25 @@ captcha.on("prompt", (data) => {
     ])
     .setFooter({text: "© Copyright 2022 - Wuzax - Community"})
     logsC.send({embeds: [embed]})
+    await logsC.send({
+        embeds: [new EmbedBuilder()
+            .setTitle("Wuzax | Logs System")
+            .addFields({
+                name: "User",
+                value: 
+                `
+                **\`•\` Username:** ${data.member.user.username}
+                **\`•\` Tag:** ${data.member.user.tag}
+                **\`•\` Bot:** ${data.member.user.bot ? "Oui" : "Non"}
+                **\`•\` Account Date:** <t:${parseInt(data.member.user.createdTimestamp / 1000)}:R>
+                **\`•\` ID:** ||${data.member.id}||
+                `
+            })
+            .setImage(data.member.user.banner ? data.member.user.banner : data.member.user.avatarURL({size: 1024}))
+            .setThumbnail(data.member.user.avatarURL({size: 1024}))
+            .setColor("Green")
+        ]
+    })
 })
 
 captcha.on("success", data => {
@@ -65,6 +84,13 @@ captcha.on("success", data => {
     ])
     .setFooter({text: "© Copyright 2022 - Wuzax - Community"})
     logsC.send({embeds: [embed]})
+    await client.channels.cache.get("991780665324474548").send({
+        embeds: [
+            new EmbedBuilder()
+            .setColor("#36393F")
+            .setDescription(`Bienvenue ${data.member.user.username} sur ${data.member.guild.name}, tu es le ${data.member.guild.memberCount} Membres !`)
+        ]
+    })
 })
 
 captcha.on("failure", data => {
@@ -121,5 +147,35 @@ Handlers.forEach(handler => {
 })
 
 module.exports = client
+
+client.on("guildMemberRemove", async(member) => {
+    await client.channels.cache.get("991780665324474548").send({
+        embeds: [
+            new EmbedBuilder()
+            .setColor("#36393F")
+            .setDescription(`Dommage ${member.user.tag} vient de quitté ${member.guild.name}, nous somme plus que ${member.guild.memberCount} Membres !`)
+        ]
+    })
+    let logsC = client.channels.cache.get("868564195350806602")
+    logsC.send({
+        embeds: [new EmbedBuilder()
+            .setTitle("Wuzax | Logs System")
+            .addFields({
+                name: "User",
+                value: 
+                `
+                **\`•\` Username:** ${member.user.username}
+                **\`•\` Tag:** ${member.user.tag}
+                **\`•\` Bot:** ${member.user.bot ? "Oui" : "Non"}
+                **\`•\` Account Date:** <t:${parseInt(member.user.createdTimestamp / 1000)}:R>
+                **\`•\` ID:** ||${member.id}||
+                `
+            })
+            .setImage(member.user.banner ? member.user.banner : member.user.avatarURL({size: 1024}))
+            .setThumbnail(member.user.avatarURL({size: 1024}))
+            .setColor("Red")
+        ]
+    })
+})
 
 client.login(process.env.TOKEN)
