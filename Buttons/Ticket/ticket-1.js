@@ -55,6 +55,13 @@ module.exports = {
                 .setStyle(ButtonStyle.Primary)
                 .setEmoji("🔓")
             )
+            .addComponents(
+                new ButtonBuilder()
+                .setCustomId("claim")
+                .setLabel("Claim")
+                .setStyle(ButtonStyle.Primary)
+                .setEmoji("⚒️")
+            )
             await DB.create({
                 GuildID: guild.id,
                 MembersID: member.id,
