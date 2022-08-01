@@ -147,10 +147,7 @@ Handlers.forEach(handler => {
 
 })
 
-["GiveAwaySys"].forEach((system) => {
-    require(`./System/${system}`)(client)
-})
-
+require("./System/Giveawaysys")(client)
 module.exports = client
 
 client.on("guildMemberRemove", async(member) => {
