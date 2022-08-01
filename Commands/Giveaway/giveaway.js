@@ -8,7 +8,7 @@ module.exports = {
         {
             name: "start",
             description: "Start a giveway",
-            type: 1,
+            type: ApplicationCommandOptionType.Subcommand,
             options: [
                 {
                     name: "duration",
