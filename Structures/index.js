@@ -178,18 +178,20 @@ client.login(process.env.TOKEN)
 client.on("messageCreate", async(message) => {
     if(message.channel.id === "1003717856950763590") {
         setTimeout(async() => {
-            await message.channel.bulkDelete(20)
-            let logsC = client.channels.cache.get("868564195350806602")
-            logsC.send({
-                embeds: [new EmbedBuilder()
-                    .setTitle("Wuzax | Logs System")
-                    .addFields({
-                        name: "User",
-                        value: `I delete messages in <#1003717856950763590> !`
-                    })
-                    .setColor("White")
-                ]
-            })
+            if(message.embeds[0].title === "✅ CAPTCHA Solved!") {
+                await message.channel.bulkDelete(20)
+                let logsC = client.channels.cache.get("868564195350806602")
+                logsC.send({
+                    embeds: [new EmbedBuilder()
+                        .setTitle("Wuzax | Logs System")
+                        .addFields({
+                            name: "User",
+                            value: `I delete messages in <#1003717856950763590> !`
+                        })
+                        .setColor("White")
+                    ]
+                })
+            }
         }, 20000)
     }
 })
