@@ -29,7 +29,8 @@ const captcha = new Captcha(client, {
     caseSensitive: true,
     attempts: 3,
     timeout: 60000,
-    showAttemptCount: true
+    showAttemptCount: true,
+    channelID: "1003717856950763590"
 })
 client.captcha = captcha
 
@@ -149,6 +150,7 @@ Handlers.forEach(handler => {
 module.exports = client
 
 client.on("guildMemberRemove", async(member) => {
+    if(!member.guild.id === "868564194235142145") return;
     await client.channels.cache.get("991780665324474548").send({
         embeds: [
             new EmbedBuilder()
@@ -162,14 +164,7 @@ client.on("guildMemberRemove", async(member) => {
             .setTitle("Wuzax | Logs System")
             .addFields({
                 name: "User",
-                value: 
-                `
-                **\`•\` Username:** ${member.user.username}
-                **\`•\` Tag:** ${member.user.tag}
-                **\`•\` Bot:** ${member.user.bot ? "Oui" : "Non"}
-                **\`•\` Account Date:** <t:${parseInt(member.user.createdTimestamp / 1000)}:R>
-                **\`•\` ID:** ||${member.id}||
-                `
+                value: `**\`•\` Username:** ${member.user.username}\n**\`•\` Tag:** ${member.user.tag}\n**\`•\` Bot:** ${member.user.bot ? "Oui" : "Non"}\n**\`•\` Account Date:** <t:${parseInt(member.user.createdTimestamp / 1000)}:R>\n**\`•\` ID:** ||${member.id}||`
             })
             .setImage(member.user.banner ? member.user.banner : member.user.avatarURL({size: 1024}))
             .setThumbnail(member.user.avatarURL({size: 1024}))
@@ -179,3 +174,22 @@ client.on("guildMemberRemove", async(member) => {
 })
 
 client.login(process.env.TOKEN)
+
+client.on("messageCreate", async(message) => {
+    if(message.channel.id === "1003717856950763590") {
+        setTimeout(async() => {
+            await message.channel.bulkDelete(20)
+            let logsC = client.channels.cache.get("868564195350806602")
+            logsC.send({
+                embeds: [new EmbedBuilder()
+                    .setTitle("Wuzax | Logs System")
+                    .addFields({
+                        name: "User",
+                        value: `I delete messages in <#1003717856950763590> !`
+                    })
+                    .setColor("White")
+                ]
+            })
+        }, 20000)
+    }
+})
