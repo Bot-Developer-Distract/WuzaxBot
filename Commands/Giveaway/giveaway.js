@@ -19,7 +19,7 @@ module.exports = {
                 {
                     name: "winners",
                     description: "Set the windows of this giveaway",
-                    type: ApplicationCommandOptionType.String,
+                    type: ApplicationCommandOptionType.Integer,
                     required: true
                 },
                 {
