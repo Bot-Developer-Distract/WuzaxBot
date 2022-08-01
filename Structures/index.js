@@ -147,7 +147,7 @@ Handlers.forEach(handler => {
 
 })
 
-["Giveawaysys"].forEach((system) => {
+["GiveAwaySys"].forEach((system) => {
     require(`./System/${system}`)(client)
 })
 
