@@ -39,6 +39,7 @@ module.exports = {
         {
             name: "actions",
             description: "Options for giveaway",
+            type: ApplicationCommandOptionType.Subcommand,
             options: [
                 {
                     name: "options",
