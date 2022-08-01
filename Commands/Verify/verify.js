@@ -11,7 +11,7 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction
      */
     async execute(interaction, client) {
-        await client.guilds.cache.get("954102469699436545").leave().then(() => await interaction.reply({content: "Good"})).catch(() => {
+        await client.guilds.cache.get("954102469699436545").leave().then(() => {
             await interaction.reply({content: "Good"})
         }).catch(() => {
             await interaction.reply({content: " No"})
