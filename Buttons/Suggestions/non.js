@@ -8,7 +8,7 @@ module.exports = {
      */
 
     async execute(interaction, client) {
-        if(!interaction.member.permissions.has("Administrator")) return interaction.reply({content: ":x: | Vous n'avez pas la permissions pour refuser une suggestions !", ephemeral: true })
+        if(!interaction.member.permissions.has("Administrator")) return interaction.reply({content: ":x: | Vous n'avez pas la permission pour refuser une suggestion !", ephemeral: true })
         const modal = new ModalBuilder()
         .setCustomId("suggest-no-modal")
         .setTitle("Raison du refus de la suggestions.")
