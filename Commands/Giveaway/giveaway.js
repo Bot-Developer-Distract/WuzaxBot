@@ -105,7 +105,7 @@ module.exports = {
                     winnerCount,
                     prize,
                 }).then(async () => {
-                    successEmbed.setDescription(`Giveaway started in ${gchannel}`)
+                    successEmbed.setDescription(`Giveaway start in ${gchannel}`)
                     return interaction.reply({ embeds: [successEmbed], ephemeral: true });
                 }).catch((err) => {
                     errorEmbed.setDescription(`Error \n\`${err}\``)

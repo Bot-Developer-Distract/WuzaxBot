@@ -18,5 +18,4 @@ module.exports = {
             interaction.reply({content: ":x: | Ce n'est pas un channel boutique", ephemeral: true})
         }
     }
-
 }
