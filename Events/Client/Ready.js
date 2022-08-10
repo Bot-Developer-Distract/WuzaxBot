@@ -9,14 +9,21 @@ module.exports = {
     * @param {Client} client
     */
     async execute(client) {
+
         const { user, ws } = client
+
         console.log(`${user.tag} is now online!`)
+
         setInterval(() => {
+
             const ping = ws.ping
+
             user.setActivity({
                 name: `Ping: ${ping} ms`,
                 type: 3,
             })
+
         }, ms("5s"))
+
     }
 }
