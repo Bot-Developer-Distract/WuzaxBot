@@ -1,5 +1,5 @@
 const { Perms } = require("../Validation/Permissions")
-const { Client } = require("discord.js")
+const { Client, ApplicationCommandType } = require("discord.js")
 const ms = require("ms")
 
 /**
@@ -19,7 +19,7 @@ module.exports = async (client, PG, Ascii) => {
 
         if (!command.name) return Table.addRow(file.split("/")[7], "🔸 FAILED", "Missing a name")
 
-        if (!command.context && !command.description) return Table.addRow(command.name, "🔸 FAILED", "Missing a description")
+        // if (!command.context && !command.description) return Table.addRow(command.name, "🔸 FAILED", "Missing a description")
 
         if (command.UserPerms)
             if (command.UserPerms.every(perms => Perms.includes(perms))) command.default_member_permissions = false
@@ -47,7 +47,12 @@ module.exports = async (client, PG, Ascii) => {
         // }, ms("5s"))
 
 
-        client.guilds.cache.get("868564194235142145").commands.set(CommandsArray)
+        client.guilds.cache.get("868564194235142145").commands.set(
+        CommandsArray,
+        {
+            name: "report",
+            type: ApplicationCommandType.User
+        })
 
     })
 

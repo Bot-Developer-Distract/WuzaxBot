@@ -1,4 +1,4 @@
-const { EmbedBuilder, InteractionWebhook, AttachmentBuilder } = require('discord.js')
+const { EmbedBuilder, InteractionWebhook, AttachmentBuilder, ApplicationCommandType } = require('discord.js')
 const canvacord = require('canvacord')
 const levelSchema = require("../../Schemas/Leveling");
 const setupSchema = require("../../Schemas/LevelingSetup");
