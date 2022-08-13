@@ -7,7 +7,7 @@ const {
   
   module.exports = {
     name: 'xp',
-    description: 'Manage a users xp.',
+    description: 'Gérer l\'xp d\'un utilisateur.',
     options: [
       {
         name: 'manage',
@@ -16,22 +16,22 @@ const {
         options: [
           {
             name: 'action',
-            description: 'The action to perform',
+            description: 'L\'action à exécuter',
             type: 3,
             required: true,
             choices: [{
-              name: 'add',
+              name: 'Ajouter',
               value: 'add'
             },
             {
-              name: 'set',
+              name: 'Définir',
               value: 'set',
             },
             ],
           },
           {
             name: 'type',
-            description: 'Choose to set the level or xp',
+            description: 'Choisissez de définir le niveau ou l\'xp',
             type: 3,
             required: true,
             choices: [
@@ -47,13 +47,13 @@ const {
           },
           {
             name: 'user',
-            description: 'The user to manage',
+            description: 'L\'utilisateur à gérer',
             type: 6,
             required: true,
           },
           {
             name: 'amount',
-            description: 'The amount of xp',
+            description: 'La quantité d\'xp',
             type: 10,
             required: true,
           },
@@ -97,7 +97,7 @@ const {
             const embed = new EmbedBuilder()
               .setTitle(`${user.username}'s XP`)
               .setFields({
-                name: 'Before:',
+                name: 'Avant:',
                 value: `\`${walletBal}\``,
                 inline: true
               }, /*{
@@ -105,7 +105,7 @@ const {
                   value: `\`${data.xp}\``,
                   inline: true
                 },*/ {
-                  name: 'Amount Added:',
+                  name: 'Nombre ajouté:',
                   value: `\`${amountAdd}\``,
                   inline: true,
                 })
@@ -142,11 +142,11 @@ const {
             const embed = new EmbedBuilder()
               .setTitle(`${user.username}'s XP`)
               .setFields({
-                name: 'Before:',
+                name: 'Avant:',
                 value: `\`${walletBal}\``,
                 inline: true
               }, {
-                  name: 'New Value:',
+                  name: 'Après:',
                   value: `\`${data.xp}\``,
                   inline: true
                 })
@@ -184,15 +184,15 @@ const {
             const embed = new EmbedBuilder()
               .setTitle(`${user.username}'s level`)
               .setFields({
-                name: 'Before:',
+                name: 'Avant:',
                 value: `\`${walletBal}\``,
                 inline: true
               }, {
-                  name: 'New Value:',
+                  name: 'Après:',
                   value: `\`${data.level}\``,
                   inline: true
                 }, {
-                  name: 'Amount Added:',
+                  name: 'Nombre ajouté:',
                   value: `\`${amountAdd}\``,
                   inline: true,
                 })
@@ -229,11 +229,11 @@ const {
             const embed = new EmbedBuilder()
               .setTitle(`${user.username}'s level`)
               .setFields({
-                name: 'Before:',
+                name: 'Avant:',
                 value: `\`${walletBal}\``,
                 inline: true
               }, {
-                  name: 'New Value:',
+                  name: 'Après:',
                   value: `\`${data.level}\``,
                   inline: true
                 })

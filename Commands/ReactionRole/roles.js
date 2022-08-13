@@ -3,7 +3,7 @@ const EditReply = require("../../Systems/EditReply")
 
 module.exports = {
     name: "roles",
-    description: "send roles button",
+    description: "envoyé le menu des roles a ajouté",
     category: "ReactionRoles",
 
     /**

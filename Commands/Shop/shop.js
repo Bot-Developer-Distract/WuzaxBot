@@ -3,7 +3,7 @@ const EditReply = require("../../Systems/EditReply")
 
 module.exports = {
     name: "shop",
-    description: "shop command",
+    description: "envoyé le menu de commande de la boutique",
     category: "Shop",
 
     /**

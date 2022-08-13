@@ -9,12 +9,12 @@ module.exports = {
   options: [
     {
       name: 'view',
-      description: 'View the level of you or someone else',
+      description: 'Visualiser votre niveau ou celui d\'une autre personne',
       type: 1,
       options: [
         {
           name: 'user',
-          description: 'The user to view',
+          description: 'L\'utilisateur à visualiser',
           type: 6,
           required: false,
         },
@@ -22,7 +22,7 @@ module.exports = {
     },
     {
       name: 'leaderboard',
-      description: 'Get the top 15 users',
+      description: 'Obtenez les 15 premiers utilisateurs',
       type: 1,
       options: [
         {
@@ -53,7 +53,7 @@ module.exports = {
 
         const userBal = levelSchema.findOne({ userId: user.id }, async (err, bal) => {
           if (!bal) {
-            return `I could not find the user in my database`
+            return `Je n'ai pas trouvé l'utilisateur dans ma base de données`
           }
 
         });
@@ -66,7 +66,7 @@ module.exports = {
 
           const balEmbed = new EmbedBuilder()
             .setTitle(`${user.username}'s level`)
-            .setDescription(`${user.tag} does not have a rank. Send some messages to get one`)
+            .setDescription(`${user.tag} n'a pas de grade. Envoyez quelques messages pour en obtenir un`)
             .setColor('Yellow')
           interaction.reply({ embeds: [balEmbed] })
 
@@ -101,7 +101,7 @@ module.exports = {
 
         const userBal = levelSchema.findOne({ userId: user.id }, async (err, bal) => {
           if (!bal) {
-            return `I could not find the user in my database`
+            return `Je n'ai pas trouvé l'utilisateur dans ma base de données`
           }
 
         });
@@ -113,7 +113,7 @@ module.exports = {
         if (!walletBal) {
           const balEmbed = new EmbedBuilder()
             .setTitle(`${user.username}'s level`)
-            .setDescription(`${user.tag} does not have a rank. Send some messages to get one`)
+            .setDescription(`${user.tag} n'a pas de grade. Envoyez quelques messages pour en obtenir un`)
             .setColor('Yellow')
           interaction.reply({ embeds: [balEmbed] })
 

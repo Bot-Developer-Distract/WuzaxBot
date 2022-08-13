@@ -3,17 +3,17 @@ const DB = require("../../Schemas/SuggestSetupDB");
 
 module.exports = {
   name: "suggestion",
-  description: "Setup or control the suggestions",
+  description: "Configurer ou contrôler les suggestions",
   permission: "ADMINISTRATOR",
   options: [
     {
       name: "setup",
-      description: "Setup the suggestions system!",
+      description: "Mettez en place le système de suggestions !",
       type: 1,
       options: [
         {
           name: "channel",
-          description: "Select the channel the suggestions will be sent to",
+          description: "Sélectionnez le canal sur lequel les suggestions seront envoyées",
           required: true,
           type: 7,
           channelTypes: [ChannelType.GuildText],
@@ -22,45 +22,45 @@ module.exports = {
     },
     {
       name: "accept-suggestion",
-      description: "Accept a user's suggestion",
+      description: "Accepter la suggestion d'un utilisateur",
       type: 1,
       options: [
         {
           name: "message-id",
           type: 3,
           required: true,
-          description: "Provide the message ID of the suggestion",
+          description: "Fournir l'ID du message de la suggestion",
         },
         {
           name: "reason",
           type: 3,
           required: false,
-          description: "Describe your reason in as much detail as possible.",
+          description: "Décrivez votre raison de manière aussi détaillée que possible.",
         },
       ],
     },
     {
       name: "decline-suggestion",
-      description: "Decline a user's suggestion",
+      description: "Refuser la suggestion d'un utilisateur",
       type: 1,
       options: [
         {
           name: "message-id",
           type: 3,
           required: true,
-          description: "Provide the message ID of the suggestion",
+          description: "Fournir l'ID du message de la suggestion",
         },
         {
           name: "reason",
           type: 3,
           required: false,
-          description: "Describe your reason in as much detail as possible.",
+          description: "Décrivez votre raison de manière aussi détaillée que possible.",
         },
       ],
     },
     {
       name: "reset",
-      description: "Reset the suggestions channel",
+      description: "Réinitialiser le canal des suggestions",
       type: 1,
     },
   ],
@@ -81,7 +81,7 @@ module.exports = {
 
           await DB.findOneAndUpdate({ GuildID: guild.id }, { SuggestChannel: SuggestChannel.id }, { new: true, upsert: true }).catch((err) => console.log(err));
 
-          const SuggestSetup = new EmbedBuilder().setDescription(`✅ | Successfully setup the suggestions system`).setColor(`#00d26a`);
+          const SuggestSetup = new EmbedBuilder().setDescription(`✅ | Configurer avec succès le système de suggestions`).setColor(`#00d26a`);
 
           await guild.channels.cache.get(SuggestChannel.id).send({ embeds: [SuggestSetup] }).then((m) => { setTimeout(() => { m.delete().catch(() => {}); }, 3 * 1000); });
 
@@ -92,9 +92,9 @@ module.exports = {
           {
           const Data = await DB.findOne({ GuildID: guild.id });
         
-          if (!Data) { return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#f8312f`).setDescription(`⛔ | This server has not setup the suggestion system`) ] }) }
+          if (!Data) { return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#f8312f`).setDescription(`⛔ | Ce serveur n'a pas configuré le système de suggestions`) ] }) }
         
-          const Reason = options.getString("reason") || "No comment";
+          const Reason = options.getString("reason") || "Pas de commentaire";
           const SuggestID = options.getString("message-id");
         
           const SuggestionsChannel = interaction.guild.channels.cache.get(Data.SuggestChannel);
@@ -102,22 +102,22 @@ module.exports = {
           const Embed = SuggestionMessage.embeds[0];
           const fild = Embed.fields[1]
         
-          Embed.fields[2] = { name: "Status", value: "\`☑ Accepted\`", inline: true };
-          Embed.fields[4] = { name: `Comment from ${interaction.user.tag}`, value: Reason, inline: false };
+          Embed.fields[2] = { name: "Statut", value: "\`☑ Accepté\`", inline: true };
+          Embed.fields[4] = { name: `Commentaire de ${interaction.user.tag}`, value: Reason, inline: false };
 
           SuggestionMessage.edit({ embeds: [EmbedBuilder.from(Embed).setColor(`#00d26a`)] });
           SuggestionMessage.reactions.removeAll();
         
-          return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#00d26a`).setDescription(`✅ | You successfully accepted the suggestion.`) ], ephemeral: true });
+          return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#00d26a`).setDescription(`✅ | Vous avez accepté la suggestion avec succès.`) ], ephemeral: true });
           }
           break;
         case "decline-suggestion":
           {
           const Data = await DB.findOne({ GuildID: guild.id });
         
-          if (!Data) { return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#f8312f`).setDescription(`⛔ | This server has not setup the suggestion system`) ] }) }
+          if (!Data) { return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#f8312f`).setDescription(`⛔ | Ce serveur n'a pas configuré le système de suggestions`) ] }) }
         
-          const Reason = options.getString("reason") || "No comment";
+          const Reason = options.getString("reason") || "Pas de commentaire";
           const SuggestID = options.getString("message-id");
         
           const SuggestionsChannel = interaction.guild.channels.cache.get(Data.SuggestChannel);
@@ -125,29 +125,29 @@ module.exports = {
         
           const Embed = SuggestionMessage.embeds[0];
         
-          Embed.fields[2] = { name: "Status", value: "\`☒ Declined\`", inline: true };
-          Embed.fields[4] = { name: `Comment from ${interaction.user.tag}`, value: Reason, inline: false };
+          Embed.fields[2] = { name: "Statut", value: "\`☒ Refusé\`", inline: true };
+          Embed.fields[4] = { name: `Commentaire de ${interaction.user.tag}`, value: Reason, inline: false };
 
           SuggestionMessage.edit({ embeds: [EmbedBuilder.from(Embed).setColor(`#f8312f`)] });
           SuggestionMessage.reactions.removeAll();
         
-          return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#00d26a`).setDescription(`✅ | You successfully declined the suggestion.`) ], ephemeral: true });
+          return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#00d26a`).setDescription(`✅ | Vous avez refusé la suggestion avec succès.`) ], ephemeral: true });
           }
           break;
         case "reset":
           {
           DB.deleteMany({ GuildID: guild.id }, async (err, data) => {
           if (err) throw err;
-          if (!data) return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#f8312f`).setDescription(`⛔ | There is no data to delete`) ] });
+          if (!data) return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#f8312f`).setDescription(`⛔ | Il n'y a pas de données à supprimer`) ] });
 
-          interaction.reply({ embeds: [ new EmbedBuilder().setDescription(`✅ | Successfully reset the suggestions channel`).setColor(`#00d26a`) ], ephemeral: true });
+          interaction.reply({ embeds: [ new EmbedBuilder().setDescription(`✅ | Réinitialisation réussie du canal des suggestions`).setColor(`#00d26a`) ], ephemeral: true });
           });
           }
           return;
       }
     } catch (e) {
       console.log(e);
-      const Embed = new EmbedBuilder().setColor(`#f8312f`).setDescription(`⛔ | An error occurred, try again`);
+      const Embed = new EmbedBuilder().setColor(`#f8312f`).setDescription(`⛔ | Une erreur s'est produite, réessayez`);
     
       return interaction.reply({ embeds: [Embed] }).then((m) => { setTimeout(() => { m.delete() }, 3 * 1000) }).catch(() => {});
     }

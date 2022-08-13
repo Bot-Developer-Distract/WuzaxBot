@@ -4,6 +4,7 @@ const today = new Date()
 
 module.exports = {
   name: "messageCreate",
+  id: "level",
   /**
  *
  * @param {Message} message
