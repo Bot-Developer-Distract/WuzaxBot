@@ -7,30 +7,30 @@ module.exports = {
     options: [
         {
             name: "start",
-            description: "Start a giveway",
+            description: "Lancer un giveaway",
             type: ApplicationCommandOptionType.Subcommand,
             options: [
                 {
                     name: "duration",
-                    description: "Pass a length (1m, 1h, 1d)",
+                    description: "Definir un temps (1m, 1h, 1d)",
                     type: ApplicationCommandOptionType.String,
                     required: true
                 },
                 {
                     name: "winners",
-                    description: "Set the windows of this giveaway",
+                    description: "Definir le nombre de gagnants",
                     type: ApplicationCommandOptionType.Integer,
                     required: true
                 },
                 {
                     name: "prize",
-                    description: "Set a prize to win",
+                    description: "Definir un prix pour le giveaway",
                     type: ApplicationCommandOptionType.String,
                     required: true
                 },
                 {
                     name: "channel",
-                    description: "Set the channel of giveaway his send",
+                    description: "Definir le channel ou le giveaway sera envoyé",
                     type: ApplicationCommandOptionType.Channel,
                     channelTypes: [ChannelType.GuildText]
                 }
@@ -38,32 +38,32 @@ module.exports = {
         },
         {
             name: "actions",
-            description: "Options for giveaway",
+            description: "Options pour les giveaway",
             type: ApplicationCommandOptionType.Subcommand,
             options: [
                 {
                     name: "options",
-                    description: "Options for giveaway",
+                    description: "Options pour les giveaway",
                     type: ApplicationCommandOptionType.String,
                     choices: [
                         {
-                            name: "end",
+                            name: "Fin",
                             value: "end"
                         },
                         {
-                            name: "pause",
+                            name: "Pause",
                             value: "pause"
                         },
                         {
-                            name: "unpause",
+                            name: "Reprendre",
                             value: "unpause"
                         },
                         {
-                            name: "reroll",
+                            name: "Reroll",
                             value: "reroll"
                         },
                         {
-                            name: "delete",
+                            name: "Supprimer",
                             value: "delete"
                         }
                     ],
@@ -71,7 +71,7 @@ module.exports = {
                 },
                 {
                     name: "message_id",
-                    description: "Set the message id of the giveaway",
+                    description: "Definir l'id d'un giveaway",
                     type: ApplicationCommandOptionType.String,
                     required: true
                 }
@@ -105,16 +105,12 @@ module.exports = {
                     winnerCount,
                     prize,
                 }).then(async () => {
-                    successEmbed.setDescription(`Giveaway start in ${gchannel}`)
+                    successEmbed.setDescription(`Giveaway lancé dans ${gchannel}`)
                     return interaction.reply({ embeds: [successEmbed], ephemeral: true });
                 }).catch((err) => {
-                    errorEmbed.setDescription(`Error \n\`${err}\``)
+                    errorEmbed.setDescription(`Erreur \n\`${err}\``)
                     return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                 })
-
-
-
-
             }
                 break;
             case 'actions': {
@@ -123,56 +119,56 @@ module.exports = {
                 const giveaway = client.giveawaysManager.giveaways.find((g) => g.guildId === interaction.guildId && g.messageId === messageid);
 
                 if (!giveaway) {
-                    errorEmbed.setDescription(`The giveaway with the messageid ${messageid} could not be found.`);
+                    errorEmbed.setDescription(`Le giveaway avec l'id ${messageid} n'a pas pu être trouvé.`);
                     return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                 }
                 switch (choice) {
                     case 'end': {
                         client.giveawaysManager.end(messageid).then(() => {
-                            successEmbed.setDescription('Giveaway ended.');
+                            successEmbed.setDescription('Giveaway Fini.');
                             return interaction.reply({ embeds: [successEmbed], ephemeral: true });
                         }).catch((err) => {
-                            errorEmbed.setDescription(`Error \n\`${err}\``)
+                            errorEmbed.setDescription(`Erreur \n\`${err}\``)
                             return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                         });
                     }
                         break;
                     case 'pause': {
                         client.giveawaysManager.pause(messageid).then(() => {
-                            successEmbed.setDescription('Giveaway paused');
+                            successEmbed.setDescription('Giveaway Mit en Pause');
                             return interaction.reply({ embeds: [successEmbed], ephemeral: true });
                         }).catch((err) => {
-                            errorEmbed.setDescription(`Error \n\`${err}\``)
+                            errorEmbed.setDescription(`Erreur \n\`${err}\``)
                             return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                         });
                     }
                         break;
                     case 'unpause': {
                         client.giveawaysManager.unpause(messageid).then(() => {
-                            successEmbed.setDescription('Giveaway unpaused');
+                            successEmbed.setDescription('Giveaway Reprit');
                             return interaction.reply({ embeds: [successEmbed], ephemeral: true });
                         }).catch((err) => {
-                            errorEmbed.setDescription(`Error \n\`${err}\``)
+                            errorEmbed.setDescription(`Erreur \n\`${err}\``)
                             return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                         });
                     }
                         break;
                     case 'reroll': {
                         client.giveawaysManager.reroll(messageid).then(() => {
-                            successEmbed.setDescription('Giveaway rerolled');
+                            successEmbed.setDescription('Giveaway Reroll');
                             return interaction.reply({ embeds: [successEmbed], ephemeral: true });
                         }).catch((err) => {
-                            errorEmbed.setDescription(`Error \n\`${err}\``)
+                            errorEmbed.setDescription(`Erreur \n\`${err}\``)
                             return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                         });
                     }
                         break;
                     case 'delete': {
                         client.giveawaysManager.delete(messageid).then(() => {
-                            successEmbed.setDescription('Giveaway deleted');
+                            successEmbed.setDescription('Giveaway Supprimer');
                             return interaction.reply({ embeds: [successEmbed], ephemeral: true });
                         }).catch((err) => {
-                            errorEmbed.setDescription(`Error \n\`${err}\``)
+                            errorEmbed.setDescription(`Erreur \n\`${err}\``)
                             return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                         });
                     }
@@ -181,7 +177,7 @@ module.exports = {
             }
                 break;
             default: {
-                console.log('Error in giveaway Command');
+                console.log('Erreur dans la commande des giveaway');
             }
         }
     }

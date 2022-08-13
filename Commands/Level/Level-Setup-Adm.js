@@ -4,26 +4,26 @@ const setupSchema = require("../../Schemas/LevelingSetup");
 
 module.exports = {
   name: 'level-adm',
-  description: 'Setup the bot.',
+  description: 'Configurez le bot.',
   options: [
     {
       name: 'view',
-      description: 'View the current setup',
+      description: 'Afficher la configuration actuelle',
       type: 1,
     },
     {
       name: 'reset',
-      description: 'Reset the config',
+      description: 'Réinitialiser la configuration',
       type: 1,
     },
     {
       name: 'rankcard',
-      description: 'Change the servers levelling display',
+      description: 'Modifier l\'affichage des niveaux sur le serveur',
       type: 1,
       options: [
         {
           name: 'enabled',
-          description: 'Is the rank card enabled',
+          description: 'La carte de rang est-elle activée',
           type: 5,
           required: true,
         },
@@ -36,13 +36,13 @@ module.exports = {
       options: [
         {
           name: 'level',
-          description: 'The level required to get this role',
+          description: 'Le niveau requis pour obtenir ce rôle',
           type: 10,
           required: true,
         },
         {
           name: 'reward',
-          description: 'The reward for reaching this level',
+          description: 'La récompense pour avoir atteint ce niveau',
           type: 8,
           required: true,
         },
@@ -50,12 +50,12 @@ module.exports = {
     },
     {
       name: 'remove-reward',
-      description: 'Remove a leveling reward',
+      description: 'Supprimer une récompense de niveau',
       type: 1,
       options: [
         {
           name: 'role',
-          description: 'The role to remove',
+          description: 'Le rôle à supprimer',
           type: 8,
           required: true,
         },
@@ -77,26 +77,26 @@ module.exports = {
           })
           if (!docs) {
             setupSchema.create({ guildId: interaction.guild.id })
-            return interaction.reply({ content: "I couldn't find this server in my database. Please try again" })
+            return interaction.reply({ content: "Je n'ai pas pu trouver ce serveur dans ma base de données. Veuillez réessayer" })
 
           }
           const rewards = await levelrewardSchema.find({ guildId: interaction.guild.id })
           if (!rewards) {
             levelrewardSchema.create({ guildId: interaction.guild.id })
-            return interaction.reply({ content: "I couldn't find this server in my database. Please try again" })
+            return interaction.reply({ content: "Je n'ai pas pu trouver ce serveur dans ma base de données. Veuillez réessayer" })
           }
 
-          var description = `**Level Rewards**\n`
+          var description = `**Récompenses des niveaux**\n`
           for (const reward of rewards) {
-            description += `Level ${reward.level} - ${reward.role}\n`
+            description += `Niveau ${reward.level} - ${reward.role}\n`
           }
 
           const embed = new EmbedBuilder()
             .setColor("Random")
-            .setTitle('Bot Settings')
+            .setTitle('Paramètres du Bot')
             .setDescription(description)
             .setFields(
-              { name: 'Rank Card Enabled', value: docs.rankCard ? 'Yes' : 'No', inline: true },
+              { name: 'Carte de rang activée', value: docs.rankCard ? 'Oui' : 'Non', inline: true },
             )
           interaction.reply({ embeds: [embed] })
           break;
@@ -110,7 +110,7 @@ module.exports = {
             await setupSchema.create({ guildId: interaction.guild.id })
           }
           interaction.reply({
-            content: `Rank card set to: ${interaction.options.getBoolean('enabled')}`,
+            content: `Carte de rang défini sur: ${interaction.options.getBoolean('enabled')}`,
             ephemeral: true,
           })
           break;
@@ -119,9 +119,9 @@ module.exports = {
           if (reset) {
             reset.delete()
             levelrewardSchema.collection.deleteMany({ guildId: interaction.guild.id })
-            return interaction.reply({ content: "Reset the config data" })
+            return interaction.reply({ content: "Réinitialiser les données de configuration" })
           } else {
-            return interaction.reply({ content: "There was no config set" })
+            return interaction.reply({ content: "Il n'y avait pas de configuration" })
           }
           break;
         case "add-reward":
@@ -130,15 +130,15 @@ module.exports = {
             level: interaction.options.getNumber('level'),
             role: interaction.options.getRole('reward')
           })
-          interaction.reply({ content: `Level ${interaction.options.getNumber('level')} will reward ${interaction.options.getRole('reward')}`, ephemeral: true })
+          interaction.reply({ content: `Le niveau ${interaction.options.getNumber('level')} a pour récompense ${interaction.options.getRole('reward')}`, ephemeral: true })
           break;
         case "remove-reward":
           const result = await levelrewardSchema.findOne({ guildId: interaction.guild.id, role: interaction.options.getRole('role') })
           if (!result) {
-            interaction.reply({content: "Could not find a level reward with that role", ephemeral: true })
+            interaction.reply({content: "Impossible de trouver une récompense de niveau avec ce rôle", ephemeral: true })
           }
           result.delete()
-          interaction.reply({content: "Deleted that level reward", ephemeral: true })
+          interaction.reply({content: "Supprimé ce niveau de récompense", ephemeral: true })
           break;
       }
     } catch (err) {

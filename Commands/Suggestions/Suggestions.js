@@ -101,8 +101,6 @@ module.exports = {
           const SuggestionMessage = await SuggestionsChannel.messages.fetch(SuggestID);
           const Embed = SuggestionMessage.embeds[0];
           const fild = Embed.fields[1]
-          
-          await SuggestionMessage.delete()
         
           Embed.color = `#00d26a`
           Embed.fields[2] = { name: "Status", value: "\`☑ Accepted\`", inline: true };

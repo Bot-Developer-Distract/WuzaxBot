@@ -5,7 +5,7 @@ const setupSchema = require("../../Schemas/LevelingSetup");
 
 module.exports = {
   name: 'level',
-  description: 'View levels and the leaderboard.',
+  description: 'Visualisez les niveaux et le classement.',
   options: [
     {
       name: 'view',
