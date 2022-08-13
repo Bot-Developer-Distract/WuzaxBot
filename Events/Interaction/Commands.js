@@ -26,7 +26,7 @@ module.exports = {
 
         if (command.BotPerms && command.BotPerms.length !== 0) if (!guild.members.me.permissions.has(command.BotPerms)) return Reply(interaction, ErrorA, `I need \`${command.BotPerms.join(", ")}\` permission(s) to execute this command!`, true)
 
-        command.run({ client, interaction})
+        command.execute({ client, interaction })
 
     }
 }
