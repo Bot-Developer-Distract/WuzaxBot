@@ -70,7 +70,7 @@ module.exports = new SlashCommand({
     /**
      * @param {ChatInputCommandInteraction} interaction 
      */
-    async execute(interaction) {
+     async execute({client, interaction}) {
         const { guildId, options, channel, guild, member } = interaction;
         const Embed = new EmbedBuilder();
         const SubCommand = options.getSubcommand();

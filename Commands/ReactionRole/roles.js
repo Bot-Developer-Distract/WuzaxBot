@@ -11,7 +11,7 @@ module.exports = new SlashCommand({
      * @param {Client} client
      * @param {ChatInputCommandInteraction} interaction
      */
-    async execute(interaction, client) {
+     async execute({client, interaction}) {
         if(!interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({content: ":x: | Tu n'a pas la permissions", ephemeral: true})
         let giveawayButton = new ButtonBuilder().setLabel("Giveaway").setCustomId("giveaway").setStyle(ButtonStyle.Primary).setEmoji("🎉")
         let annonceButton = new ButtonBuilder().setLabel("Annonce").setCustomId("annonce").setStyle(ButtonStyle.Primary).setEmoji("📌")

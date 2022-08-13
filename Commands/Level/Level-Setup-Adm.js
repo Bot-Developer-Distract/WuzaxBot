@@ -67,7 +67,7 @@ module.exports = new SlashCommand({
   /**
  * @param {ChatInputCommandInteraction} interaction
  */
-  execute: async (interaction) => {
+   async execute({client, interaction}) {
     const { options } = interaction;
 
     try {

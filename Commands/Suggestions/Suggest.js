@@ -8,7 +8,7 @@ module.exports = new SlashCommand({
   /**
    * @param {ChatInputCommandInteraction} interaction
    */
-  async execute(interaction) {
+   async execute({client, interaction}) {
     try {
       const InputField = new TextInputBuilder().setCustomId("Suggestion_Modal").setLabel("Suggestion").setPlaceholder("Décrivez ici ce que vous souhaitez suggérer").setMinLength(1).setMaxLength(1000).setRequired(true).setStyle(2);
   

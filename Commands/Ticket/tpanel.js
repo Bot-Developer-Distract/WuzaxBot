@@ -49,7 +49,7 @@ module.exports = new SlashCommand({
     /**
      * @param {ChatInputCommandInteraction} interaction 
      */
-    async execute(interaction) {
+    async execute({client, interaction}) {
         if(!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) return interaction.reply({content: ":x: | You do not have permissions for use this command", ephemeral: true })
         const { guild, options } = interaction;
 

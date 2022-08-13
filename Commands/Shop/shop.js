@@ -11,7 +11,7 @@ module.exports = new SlashCommand({
      * @param {Client} client
      * @param {ChatInputCommandInteraction} interaction
      */
-    async execute(interaction, client) {
+     async execute({client, interaction}) {
         let buttonShop = new ButtonBuilder().setLabel("Commander").setCustomId("shop.cmd").setStyle(ButtonStyle.Primary).setEmoji("🛒")
         let shopButton = new ActionRowBuilder()
             .addComponents([buttonShop])

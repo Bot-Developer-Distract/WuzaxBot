@@ -11,7 +11,7 @@ module.exports = new SlashCommand({
      * @param {Client} client
      * @param {ChatInputCommandInteraction} interaction
      */
-    async execute(interaction, client) {
+     async execute({client, interaction}) {
         if(!interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({content: ":x: | Tu n'a pas la permissions", ephemeral: true})
         if(interaction.channel.name.includes("boutique")) {
             await interaction.channel.delete()

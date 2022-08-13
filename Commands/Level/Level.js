@@ -46,7 +46,7 @@ module.exports = new SlashCommand({
     },
   ],
 
-  async execute(interaction) {
+  async execute({client, interaction}) {
     const setup = await setupSchema.findOne({ guildId: interaction.guild.id })
     if (interaction.options.getSubcommand() === 'view') {
       if (interaction.options.getUser('user')) {

@@ -11,6 +11,6 @@ module.exports = new SlashCommand({
      * @param {Client} client
      * @param {CommandInteraction} interaction
      */
-    async execute(interaction, client) {
+     async execute({client, interaction}) {
     }
 })

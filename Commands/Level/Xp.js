@@ -63,7 +63,7 @@ const {
     ],
   
   
-    async execute(interaction) {
+    async execute({client, interaction}) {
   
       const user = interaction.options.getUser('user');
       let amountAdd = interaction.options.getNumber('amount')
