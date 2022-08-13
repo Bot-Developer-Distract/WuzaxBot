@@ -128,7 +128,7 @@ module.exports = {
           Embed.fields[2] = { name: "Status", value: "\`☒ Declined\`", inline: true };
           Embed.fields[4] = { name: `Comment from ${interaction.user.tag}`, value: Reason, inline: false };
 
-          SuggestionMessage.edit({ embeds: [EmbedBuilder.from(Embed).setColor(`#00d26a`)] });
+          SuggestionMessage.edit({ embeds: [EmbedBuilder.from(Embed).setColor(`#f8312f`)] });
           SuggestionMessage.reactions.removeAll();
         
           return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#00d26a`).setDescription(`✅ | You successfully declined the suggestion.`) ], ephemeral: true });
