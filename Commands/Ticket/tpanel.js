@@ -1,7 +1,8 @@
 const { ButtonBuilder, ChannelType, ApplicationCommandOptionType, ActionRowBuilder, EmbedBuilder, ChatInputCommandInteraction, PermissionFlagsBits, ButtonStyle } = require('discord.js');
 const DB = require("../../Schemas/TicketSetup");
+const { SlashCommand } = require("discord-commands-params")
 
-module.exports = {
+module.exports = new SlashCommand({
     name: "tpanel",
     description: "Setup your ticket system",
     options: [
@@ -39,30 +40,10 @@ module.exports = {
             type: ApplicationCommandOptionType.String,
         },
         {
-            name: "first-button", 
+            name: "button", 
             description: "Select a name for your first button", 
             required: true, 
             type: ApplicationCommandOptionType.String, 
-        },
-        {
-            name: "second-button", 
-            description: "Select a name for your second button", 
-            type: ApplicationCommandOptionType.String, 
-        },
-        {
-            name: "third-button", 
-            description: "Select a name for your third button", 
-            type: ApplicationCommandOptionType.String, 
-        },
-        {
-            name: "fourth-button",
-            description: "Select a name for your fourth button",
-            type: ApplicationCommandOptionType.String
-        },
-        {
-            name: "fifth-button",
-            description: "Select a name for your fifth button",
-            type: ApplicationCommandOptionType.String
         }
     ],
     /**
@@ -81,11 +62,7 @@ module.exports = {
             const Everyone = guild.roles.everyone;
             const Description = options.getString("description");
 
-            const Button1 = options.getString("first-button");
-            const Button2 = options.getString("second-button");
-            const Button3 = options.getString("third-button");
-            const Button4 = options.getString("fourth-button");
-            const Button5 = options.getString("fifth-button");
+            const Button1 = options.getString("button");
 
             await DB.findOneAndUpdate(
                 {GuildID: guild.id},
@@ -111,38 +88,6 @@ module.exports = {
                         .setLabel(Button1)
                         .setStyle(ButtonStyle.Secondary),
                 );
-                if (Button2) {
-                    Buttons.addComponents(
-                        new ButtonBuilder()
-                        .setCustomId("Ticket-2")
-                        .setLabel(Button2)
-                        .setStyle(ButtonStyle.Secondary),
-                    )
-                }
-                if (Button3) {
-                    Buttons.addComponents(
-                        new ButtonBuilder()
-                        .setCustomId("Ticket-3")
-                        .setLabel(Button3)
-                        .setStyle(ButtonStyle.Secondary),
-                    )
-                }
-                if (Button4) {
-                    Buttons.addComponents(
-                        new ButtonBuilder()
-                        .setCustomId("Ticket-4")
-                        .setLabel(Button4)
-                        .setStyle(ButtonStyle.Secondary),
-                    )
-                }
-                if (Button5) {
-                    Buttons.addComponents(
-                        new ButtonBuilder()
-                        .setCustomId("Ticket-5")
-                        .setLabel(Button5)
-                        .setStyle(ButtonStyle.Secondary),
-                    )
-                }
 
                 const Embed = new EmbedBuilder()
                     .setAuthor({name: `${guild.name} | Ticket System`, iconURL: `${guild.iconURL({dynamic: true})}`})
@@ -165,4 +110,4 @@ module.exports = {
             console.error(err);
         }
     }
-}
+})

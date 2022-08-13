@@ -1,7 +1,8 @@
 const { Client, ChatInputCommandInteraction } = require("discord.js")
 const EditReply = require("../../Systems/EditReply")
+const { SlashCommand } = require("discord-commands-params")
 
-module.exports = {
+module.exports = new SlashCommand({
     name: "close",
     description: "supprimer une demande de boutique",
     category: "Shop",
@@ -18,4 +19,4 @@ module.exports = {
             interaction.reply({content: ":x: | Ce n'est pas un channel boutique", ephemeral: true})
         }
     }
-}
+})

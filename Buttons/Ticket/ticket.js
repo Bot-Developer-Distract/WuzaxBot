@@ -1,9 +1,9 @@
-const { ButtonInteraction, EmbedBuilder, MessageActionRow, MessageButton, PermissionFlagsBits } = require(`discord.js`);
+const { ButtonInteraction, EmbedBuilder, MessageActionRow, MessageButton, PermissionFlagsBits, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require(`discord.js`);
 const DB = require("../../Schemas/TicketDB");
 const TicketSetupData = require("../../Schemas/TicketSetup");
 
 module.exports = {
-    id: `Ticket-3`,
+    id: `Ticket`,
     /**
      * @param {ButtonInteraction} interaction
      */

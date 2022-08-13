@@ -1,7 +1,8 @@
 const { Client, ChatInputCommandInteraction, ButtonStyle, ButtonBuilder, ActionRowBuilder, EmbedBuilder, ApplicationCommandType, ContextMenuCommandInteraction, CommandInteraction } = require("discord.js")
 const EditReply = require("../../Systems/EditReply")
+const { SlashCommand } = require("discord-commands-params")
 
-module.exports = {
+module.exports = new SlashCommand({
     name: "report",
     type: ApplicationCommandType.User,
     category: "Report",
@@ -12,4 +13,4 @@ module.exports = {
      */
     async execute(interaction, client) {
     }
-}
+})

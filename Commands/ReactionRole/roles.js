@@ -1,7 +1,8 @@
 const { Client, ChatInputCommandInteraction, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js")
 const EditReply = require("../../Systems/EditReply")
+const { SlashCommand } = require("discord-commands-params")
 
-module.exports = {
+module.exports = new SlashCommand({
     name: "roles",
     description: "envoyé le menu des roles a ajouté",
     category: "ReactionRoles",
@@ -19,5 +20,4 @@ module.exports = {
         interaction.reply({content: "Panel envoyé !", ephemeral: true})
         interaction.channel.send({components: [rolesButtons]})
     }
-
-}
+})

@@ -4,8 +4,9 @@ const {
   
   const levelSchema = require("../../Schemas/Leveling");
   const setupSchema = require("../../Schemas/LevelingSetup");
-  
-  module.exports = {
+  const { SlashCommand } = require("discord-commands-params")
+
+  module.exports = new SlashCommand({
     name: 'xp',
     description: 'Gérer l\'xp d\'un utilisateur.',
     options: [
@@ -246,4 +247,4 @@ const {
         }
       }
     }
-  }
+  })

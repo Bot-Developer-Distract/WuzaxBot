@@ -1,7 +1,8 @@
 const { Client, ChatInputCommandInteraction, ButtonBuilder, ButtonStyle, ActionRowBuilder, EmbedBuilder } = require("discord.js")
 const EditReply = require("../../Systems/EditReply")
+const { SlashCommand } = require("discord-commands-params")
 
-module.exports = {
+module.exports = new SlashCommand({
     name: "shop",
     description: "envoyé le menu de commande de la boutique",
     category: "Shop",
@@ -33,4 +34,4 @@ module.exports = {
         interaction.reply({content: "Message envoyé !", ephemeral: true })       
     }
 
-}
+})

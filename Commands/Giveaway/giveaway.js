@@ -10,7 +10,7 @@ module.exports = new SlashCommand({
     },
     options: [
         {
-            name: "starting",
+            name: "start",
             description: "Lancer un giveaway",
             type: ApplicationCommandOptionType.Subcommand,
             options: [

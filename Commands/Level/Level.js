@@ -2,8 +2,9 @@ const { EmbedBuilder, InteractionWebhook, AttachmentBuilder, ApplicationCommandT
 const canvacord = require('canvacord')
 const levelSchema = require("../../Schemas/Leveling");
 const setupSchema = require("../../Schemas/LevelingSetup");
+const { SlashCommand } = require("discord-commands-params")
 
-module.exports = {
+module.exports = new SlashCommand({
   name: 'level',
   description: 'Visualisez les niveaux et le classement.',
   options: [
@@ -187,4 +188,4 @@ module.exports = {
       }
     }
   }
-}
+})

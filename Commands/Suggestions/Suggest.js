@@ -1,7 +1,8 @@
 const { ActionRowBuilder, ModalBuilder, ChatInputCommandInteraction, EmbedBuilder, TextInputBuilder } = require("discord.js");
 require("../../Modals/Suggestions/Suggest");
+const { SlashCommand } = require("discord-commands-params")
 
-module.exports = {
+module.exports = new SlashCommand({
   name: "suggest",
   description: "Créez une suggestion de manière organisée !",
   /**
@@ -23,4 +24,4 @@ module.exports = {
       return interaction.reply({ embeds: [Embed], ephemeral: true });
     }
   },
-};
+})

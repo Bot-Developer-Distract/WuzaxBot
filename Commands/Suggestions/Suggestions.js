@@ -1,7 +1,8 @@
 const { ChatInputCommandInteraction, EmbedBuilder, ChannelType } = require("discord.js");
 const DB = require("../../Schemas/SuggestSetupDB");
+const { SlashCommand } = require("discord-commands-params")
 
-module.exports = {
+module.exports = new SlashCommand({
   name: "suggestion",
   description: "Configurer ou contrôler les suggestions",
   permission: "ADMINISTRATOR",
@@ -152,4 +153,4 @@ module.exports = {
       return interaction.reply({ embeds: [Embed] }).then((m) => { setTimeout(() => { m.delete() }, 3 * 1000) }).catch(() => {});
     }
   },
-};
+})

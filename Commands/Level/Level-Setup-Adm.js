@@ -1,8 +1,9 @@
 const { EmbedBuilder, ChatInputCommandInteraction } = require("discord.js");
 const levelrewardSchema = require("../../Schemas/LevelReward");
 const setupSchema = require("../../Schemas/LevelingSetup");
+const { SlashCommand } = require("discord-commands-params")
 
-module.exports = {
+module.exports = new SlashCommand({
   name: 'level-adm',
   description: 'Configurez le bot.',
   options: [
@@ -145,4 +146,4 @@ module.exports = {
       console.log(err)
     }
   },
-};
+});

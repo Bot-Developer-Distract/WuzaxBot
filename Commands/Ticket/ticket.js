@@ -2,8 +2,9 @@ const { EmbedBuilder, ChatInputCommandInteraction, ApplicationCommandOptionType 
 const { createTranscript } = require('discord-html-transcripts');
 const DB = require("../../Schemas/TicketDB");
 const TicketSetupData = require("../../Schemas/TicketSetup");
+const { SlashCommand } = require("discord-commands-params")
 
-module.exports = {
+module.exports = new SlashCommand({
     name: "ticket",
     description: "Ticket Actions",
     options: [
@@ -304,4 +305,4 @@ module.exports = {
             break;
         }
     }
-}
+})
