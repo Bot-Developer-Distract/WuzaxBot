@@ -6,26 +6,26 @@ const { SlashCommand } = require("discord-commands-params")
 
 module.exports = new SlashCommand({
     name: "ticket",
-    description: "Ticket Actions",
+    description: "Actions des tickets",
     options: [
         {
             name: "user",
-            description: "Add or remove a user from the ticket",
+            description: "Ajouter ou supprimer un utilisateur du ticket",
             type: ApplicationCommandOptionType.Subcommand,
             options: [
                 {
                     name: "action",
                     type: ApplicationCommandOptionType.String,
-                    description: "Add or remove a member from this ticket",
+                    description: "Ajouter ou supprimer un utilisateur du ticket",
                     required: true,
                     choices: [
-                        {name: "Add", value: "add"},
-                        {name: "Remove", value: "remove"},
+                        {name: "Ajouté", value: "add"},
+                        {name: "Retiré", value: "remove"},
                     ]
                 },
                 {
                     name: "member",
-                    description: "Select a member",
+                    description: "Choisir un membre",
                     type: ApplicationCommandOptionType.User,
                     required: true,
                 },
@@ -33,12 +33,12 @@ module.exports = new SlashCommand({
         },
         {
             name: "close",
-            description: "Close the ticket",
+            description: "Fermé ce ticket",
             type: ApplicationCommandOptionType.Subcommand,
             options: [
                 {
                     name: "reason",
-                    description: "Provide a reason",
+                    description: "Donnez une raison",
                     type: ApplicationCommandOptionType.String,
                     required: true
                 }
@@ -46,24 +46,24 @@ module.exports = new SlashCommand({
         },
         {
             name: "lock",
-            description: "Lock this ticket channel for reviewing",
+            description: "Verrouiller ce channel de ticket",
             type: ApplicationCommandOptionType.Subcommand,
             options: [
                 {
                     name: "reason",
-                    description: "Provide a reason",
+                    description: "Donnez une raison",
                     type: ApplicationCommandOptionType.String
                 }
             ]
         },
         {
             name: "unlock",
-            description: "Unlock this ticket",
+            description: "Déverrouiller ce ticket",
             type: ApplicationCommandOptionType.Subcommand,
         },
         {
             name: "claim",
-            description: "Claim this ticket for yourself",
+            description: "Réclamez ce ticket",
             type: ApplicationCommandOptionType.Subcommand
         }
     ],
@@ -80,14 +80,14 @@ module.exports = new SlashCommand({
         if (!TicketSetup) {
             Embed
                 .setColor("Red")
-                .setDescription(`:x: There is no data in the database`);
+                .setDescription(`:x: Il n'y a pas de données dans la base de données`);
             return interaction.editReply({embeds: [Embed], ephemeral: true});
         }
 
         if (!member.roles.cache.find(r => r.id === TicketSetup.Handlers) || !member.permissions.has("ADMINISTRATOR")) {
             Embed
                 .setColor("Red")
-                .setDescription(`:x: This command is for staff only!`);
+                .setDescription(`:x: Cette commande est réservée au personnel !`);
             return interaction.editReply({embeds: [Embed], ephemeral: true});
         }
 
@@ -103,14 +103,14 @@ module.exports = new SlashCommand({
                             if (!docs) {
                                 Embed
                                     .setColor("Red")
-                                    .setDescription(`:x: This channel is not a ticket channel`);
+                                    .setDescription(`:x: Ce canal n'est pas un channel de tickets`);
                                 return interaction.editReply({embeds: [Embed], ephemeral: true});
                             }
                             
                             if (docs.MembersID.includes(Member.id)) {
                                 Embed
                                     .setColor("Red")
-                                    .setDescription(`:x: This user is already in the ticket`);
+                                    .setDescription(`:x: Cet utilisateur est déjà dans le ticket`);
                                 return interaction.editReply({embeds: [Embed]});
                             }
         
@@ -125,7 +125,7 @@ module.exports = new SlashCommand({
                             interaction.editReply({
                                 embeds: [
                                     Embed.setColor("Green").setDescription(
-                                        `:white_check_mark: ${Member} has been added to the ticket`
+                                        `:white_check_mark: ${Member} a été ajoutée au ticket`
                                     )
                                 ]
                             });
@@ -139,13 +139,13 @@ module.exports = new SlashCommand({
                             if (!docs) {
                                 Embed
                                     .setColor("Red")
-                                    .setDescription(`:x: This channel is not a ticket channel`);
+                                    .setDescription(`:x: Ce canal n'est pas un channel de tickets`);
                                 return interaction.editReply({embeds: [Embed], ephemeral: true});
                             }
                             if (!docs.MembersID.includes(Member.id)) {
                                 Embed
                                     .setColor("Red")
-                                    .setDescription(`:x: This user is not in the ticket`);
+                                    .setDescription(`:x: Cet utilisateur n'est pas dans le ticket`);
                                 return interaction.editReply({embeds: [Embed], ephemeral: true});
                             }
         
@@ -159,7 +159,7 @@ module.exports = new SlashCommand({
                             interaction.editReply({
                                 embeds: [
                                     Embed.setColor("Green").setDescription(
-                                        `:white_check_mark: ${Member} has been removed from this ticket`
+                                        `:white_check_mark: ${Member} a été supprimé de ce ticket`
                                     )
                                 ]
                             })
@@ -178,14 +178,14 @@ module.exports = new SlashCommand({
                     if (!data) {
                         Embed
                             .setColor("Red")
-                            .setDescription(`:x: There is no data in the database. Please delete this ticket manually`);
+                            .setDescription(`:x: Il n'y a pas de données dans la base de données. Veuillez supprimer ce ticket manuellement`);
                         return interaction.editReply({embeds: [Embed], ephemeral: true});
                     }
 
                     if (data.Closed === true) {
                         Embed
                             .setColor("Red")
-                            .setDescription(`:x: This ticket is already closed. Please wait for it to be deleted`);
+                            .setDescription(`:x: Ce ticket est déjà fermé. Veuillez attendre qu'il soit supprimé`);
                         return interaction.editReply({embeds: [Embed], ephemeral: true});
                     }
 
@@ -202,8 +202,8 @@ module.exports = new SlashCommand({
 
                     try {
                         Embed
-                            .setTitle(`Ticket ID: ${data.TicketID}`)
-                            .setDescription(`Closed By: ${member.user.tag}\nReason: **${Reason}**\nMember: <@${data.CreatedBy}>`)
+                            .setTitle(`ID du ticket: ${data.TicketID}`)
+                            .setDescription(`Fermé par: ${member.user.tag}\nRaison: **${Reason}**\nMembre: <@${data.CreatedBy}>`)
                             .setThumbnail(`${interaction.guild.iconURL({dynamic: true})}`)
                             .setTimestamp();
                         
@@ -221,20 +221,20 @@ module.exports = new SlashCommand({
             }
             break;
             case "lock": {
-                const Reason = options.getString("reason") || "No reason provided";
+                const Reason = options.getString("reason") || "Pas de raison donné";
                 DB.findOne({ChannelID: channel.id}, async (err, data) => {
                     if (err) throw err;
                     if (!data) {
                         Embed
                             .setColor("Red")
-                            .setDescription(`:x: There is no data in the database`);
+                            .setDescription(`:x: il n'y a pas de données dans la base de données`);
                         return interaction.editReply({embeds: [Embed]});
                     }
 
                     if (data.Locked === true) {
                         Embed
                             .setColor("Red")
-                            .setDescription(`:x: This ticket is already locked`);
+                            .setDescription(`:x: Ce ticket est déjà verrouillé`);
                         return interaction.editReply({embeds: [Embed]});
                     }
                     await DB.updateOne({
@@ -242,7 +242,7 @@ module.exports = new SlashCommand({
                     }, {
                         Locked: true
                     });
-                    Embed.setDescription(`:white_check_mark: This ticket is now locked for reviewing`).setColor("Green");
+                    Embed.setDescription(`:white_check_mark: Ce ticket est maintenant verrouillé`).setColor("Green");
                     data.MembersID.forEach(m => {
                         channel.permissionOverwrites.edit(m, {
                             SendMessages: false,
@@ -258,13 +258,13 @@ module.exports = new SlashCommand({
                     if (!data) {
                         Embed
                             .setColor("Red")
-                            .setDescription(`:x: There is no data in the database`);
+                            .setDescription(`:x: Il n'y a pas de données dans la base de données`);
                         return interaction.editReply({embeds: [Embed]});
                     }
                     if (data.Locked === false) {
                         Embed
                             .setColor("Red")
-                            .setDescription(`:x: This ticket is already unlocked!`);
+                            .setDescription(`:x: Ce ticket est déjà déverrouillé !`);
                         return interaction.editReply({embeds: [Embed]});
                     }
                     await DB.updateOne({ ChannelID: channel.id}, { Locked: false });
@@ -273,7 +273,7 @@ module.exports = new SlashCommand({
                             SendMessages: true,
                         });
                     });
-                    Embed.setDescription(`:white_check_mark: This ticket has been unlocked`).setColor("Green");
+                    Embed.setDescription(`:white_check_mark: Ce ticket a été déverrouillé`).setColor("Green");
                     interaction.editReply({embeds: [Embed]});
                 })
             }
@@ -284,19 +284,19 @@ module.exports = new SlashCommand({
                     if (!data) {
                         Embed
                             .setColor("Red")
-                            .setDescription(`:x: There is no data in the database`);
+                            .setDescription(`:x: Il n'y a pas de données dans la base de données`);
                         return interaction.editReply({embeds: [Embed]});
                     }
                     if (data.Claimed === true) {
                         Embed
                             .setColor("Red")
-                            .setDescription(`:x: This ticket has already been claimed by <@${data.ClaimedBy}>`);
+                            .setDescription(`:x: Ce ticket a déjà été réclamé par <@${data.ClaimedBy}>`);
                         return interaction.editReply({embeds: [Embed]});
                     }
 
                     await DB.updateOne({ChannelID: channel.id}, {Claimed: true, ClaimedBy: member.id});
 
-                    Embed.setDescription(`This ticket has been claimed by ${member}`).setColor("Green");
+                    Embed.setDescription(`Ce ticket a été réclamé par ${member}`).setColor("Green");
                     interaction.editReply({
                         embeds: [Embed],
                     });
