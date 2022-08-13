@@ -102,7 +102,7 @@ module.exports = {
           const Embed = SuggestionMessage.embeds[0];
           const fild = Embed.fields[1]
         
-          Embed.color = { `#00d26a` }
+          EmbedBuilder.from(Embed).setColor(`#00d26a`);
           Embed.fields[2] = { name: "Status", value: "\`☑ Accepted\`", inline: true };
           Embed.fields[4] = { name: `Comment from ${interaction.user.tag}`, value: Reason, inline: false };
 
