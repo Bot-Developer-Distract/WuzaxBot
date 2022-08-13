@@ -1,9 +1,13 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ChatInputCommandInteraction, EmbedBuilder, Client, ChannelType, ApplicationCommandOptionType } = require('discord.js');
 const ms = require('ms');
-
-module.exports = {
+const { SlashCommand } = require("discord-commands-params")
+module.exports = new SlashCommand({
     name: "giveaway",
     description: "Giveaways !",
+    permissions: {
+        bot: "SendMessages",
+        member: "SendMessages"
+    },
     options: [
         {
             name: "start",
@@ -181,4 +185,4 @@ module.exports = {
             }
         }
     }
-}
+});
