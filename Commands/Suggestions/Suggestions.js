@@ -102,7 +102,6 @@ module.exports = {
           const Embed = SuggestionMessage.embeds[0];
           const fild = Embed.fields[1]
         
-          EmbedBuilder.from(Embed).setColor(`#00d26a`);
           Embed.fields[2] = { name: "Status", value: "\`☑ Accepted\`", inline: true };
           Embed.fields[4] = { name: `Comment from ${interaction.user.tag}`, value: Reason, inline: false };
 
@@ -126,12 +125,10 @@ module.exports = {
         
           const Embed = SuggestionMessage.embeds[0];
         
-          EmbedBuilder.from(Embed).setColor(`#f8312f`);
           Embed.fields[2] = { name: "Status", value: "\`☒ Declined\`", inline: true };
           Embed.fields[4] = { name: `Comment from ${interaction.user.tag}`, value: Reason, inline: false };
-          console.log(Embed.color)
 
-          SuggestionMessage.edit({ embeds: [Embed] });
+          SuggestionMessage.edit({ embeds: [EmbedBuilder.from(Embed).setColor(`#00d26a`)] });
           SuggestionMessage.reactions.removeAll();
         
           return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#00d26a`).setDescription(`✅ | You successfully declined the suggestion.`) ], ephemeral: true });
