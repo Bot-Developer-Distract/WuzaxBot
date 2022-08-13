@@ -84,7 +84,7 @@ module.exports = new SlashCommand({
                 const Buttons = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
-                        .setCustomId("Ticket-1")
+                        .setCustomId("Ticket")
                         .setLabel(Button1)
                         .setStyle(ButtonStyle.Secondary),
                 );
