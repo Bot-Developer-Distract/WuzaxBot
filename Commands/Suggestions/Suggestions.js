@@ -106,7 +106,7 @@ module.exports = {
           Embed.fields[2] = { name: "Status", value: "\`☑ Accepted\`", inline: true };
           Embed.fields[4] = { name: `Comment from ${interaction.user.tag}`, value: Reason, inline: false };
 
-          SuggestionMessage.edit({ embeds: [Embed] });
+          SuggestionMessage.edit({ embeds: [Embed, EmbedBuilder.from(Embed).setColor(`#00d26a`)] });
           SuggestionMessage.reactions.removeAll();
         
           return interaction.reply({ embeds: [ new EmbedBuilder().setColor(`#00d26a`).setDescription(`✅ | You successfully accepted the suggestion.`) ], ephemeral: true });
