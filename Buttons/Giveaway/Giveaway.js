@@ -25,7 +25,7 @@ module.exports = {
         if (data.Entered.includes(interaction.user.id)) {
             embed
                 .setColor("Red")
-                .setDescription(`Vous avez déjà participé au giveaway`);
+                .setDescription(`Vous participé déja au giveaway`);
             return interaction.reply({ embeds: [embed], ephemeral: true });
         }
 
@@ -52,7 +52,7 @@ module.exports = {
         }).then(() => {
             embed
                 .setColor("Green")
-                .setDescription(`Vous avez participé au giveaway`);
+                .setDescription(`Vous participé désormais au giveaway`);
             return interaction.reply({ embeds: [embed], ephemeral: true });
         });
     }
