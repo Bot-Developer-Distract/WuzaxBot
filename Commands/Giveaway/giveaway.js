@@ -1,81 +1,41 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ChatInputCommandInteraction, EmbedBuilder, Client, ChannelType, ApplicationCommandOptionType } = require('discord.js');
-const ms = require('ms');
+const { ChatInputCommandInteraction, Client, EmbedBuilder, TextInputBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandOptionType, ModalBuilder, PermissionsBitField, TextInputStyle, ButtonStyle } = require("discord.js");
+const DB = require("../../../schemas/GiveawayDB");
+const { endGiveaway } = require("../../../structure/utils/GiveawayFunctions");
 const { SlashCommand } = require("discord-commands-params")
+
 module.exports = new SlashCommand({
     name: "giveaway",
-    description: "Giveaways !",
-    permissions: {
-        bot: "SendMessages",
-        member: "SendMessages"
-    },
+    description: "Créé ou Géré un giveaway",
+    defaultMemberPermissions: PermissionsBitField.Flags.ManageGuild,
+    dmPermission: false,
+    botPermissions: ["SendMessages"],
     options: [
         {
-            name: "start",
-            description: "Lancer un giveaway",
+            name: "create",
+            description: "Créé un giveaway",
             type: ApplicationCommandOptionType.Subcommand,
-            options: [
-                {
-                    name: "duration",
-                    description: "Definir un temps (1m, 1h, 1d)",
-                    type: ApplicationCommandOptionType.String,
-                    required: true
-                },
-                {
-                    name: "winners",
-                    description: "Definir le nombre de gagnants",
-                    type: ApplicationCommandOptionType.Integer,
-                    required: true
-                },
-                {
-                    name: "prize",
-                    description: "Definir un prix pour le giveaway",
-                    type: ApplicationCommandOptionType.String,
-                    required: true
-                },
-                {
-                    name: "channel",
-                    description: "Definir le channel ou le giveaway sera envoyé",
-                    type: ApplicationCommandOptionType.Channel,
-                    channelTypes: [ChannelType.GuildText]
-                }
-            ]
         },
         {
-            name: "actions",
-            description: "Options pour les giveaway",
+            name: "manage",
+            description: "Géré un giveaway",
             type: ApplicationCommandOptionType.Subcommand,
             options: [
                 {
-                    name: "options",
-                    description: "Options pour les giveaway",
+                    name: "toggle",
+                    description: "Fournir une option pour gérer",
                     type: ApplicationCommandOptionType.String,
+                    required: true,
                     choices: [
-                        {
-                            name: "Fin",
-                            value: "end"
-                        },
-                        {
-                            name: "Pause",
-                            value: "pause"
-                        },
-                        {
-                            name: "Reprendre",
-                            value: "unpause"
-                        },
-                        {
-                            name: "Reroll",
-                            value: "reroll"
-                        },
-                        {
-                            name: "Supprimer",
-                            value: "delete"
-                        }
-                    ],
-                    required: true
+                        { name: "End", value: "end" },
+                        { name: "Pause", value: "pause" },
+                        { name: "Unpause", value: "unpause" },
+                        { name: "Reroll", value: "reroll" },
+                        { name: "Delete", value: "delete" },
+                    ]
                 },
                 {
                     name: "message_id",
-                    description: "Definir l'id d'un giveaway",
+                    description: "Fournir l'ID du message du giveaway",
                     type: ApplicationCommandOptionType.String,
                     required: true
                 }
@@ -83,106 +43,141 @@ module.exports = new SlashCommand({
         }
     ],
     /**
-     * 
-     * @param {ChatInputCommandInteraction} interaction 
+     * @param {ChatInputCommandInteraction} interaction
      * @param {Client} client
      */
-    async execute({client, interaction}) {
-        const { options } = interaction;
-        const Sub = options.getSubcommand();
+    async execute(interaction, client) {
+        const subcommand = interaction.options.getSubcommand();
 
-        const errorEmbed = new EmbedBuilder()
-            .setColor('Red')
+        switch (subcommand) {
+            case "create": {
+                const prize = new ActionRowBuilder().addComponents(
+                    new TextInputBuilder()
+                        .setCustomId("giveaway-prize")
+                        .setLabel("Prix")
+                        .setStyle(TextInputStyle.Short)
+                        .setMaxLength(256)
+                        .setRequired(true)
+                );
 
-        const successEmbed = new EmbedBuilder()
-            .setColor('#38ca08')
+                const winners = new ActionRowBuilder().addComponents(
+                    new TextInputBuilder()
+                        .setCustomId("giveaway-winners")
+                        .setLabel("Nombre de gagnants")
+                        .setStyle(TextInputStyle.Short)
+                        .setRequired(true)
+                );
 
-        switch (Sub) {
-            case 'start': {
-                const gchannel = options.getChannel('channel') || interaction.channel;
-                const duration = options.getString('duration');
-                const winnerCount = options.getInteger('winners');
-                const prize = options.getString('prize');
+                const duration = new ActionRowBuilder().addComponents(
+                    new TextInputBuilder()
+                        .setCustomId("giveaway-duration")
+                        .setLabel("Durée")
+                        .setStyle(TextInputStyle.Short)
+                        .setPlaceholder("Example: 1 day")
+                        .setRequired(true)
+                );
+                
+                const modal = new ModalBuilder()
+                    .setCustomId("giveaway-options")
+                    .setTitle("Créé un giveaway")
+                    .setComponents(prize, winners, duration);
 
-                client.giveawaysManager.start(gchannel, {
-                    duration: ms(duration),
-                    winnerCount,
-                    prize,
-                }).then(async () => {
-                    successEmbed.setDescription(`Giveaway lancé dans ${gchannel}`)
-                    return interaction.reply({ embeds: [successEmbed], ephemeral: true });
-                }).catch((err) => {
-                    errorEmbed.setDescription(`Erreur \n\`${err}\``)
-                    return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
-                })
+                await interaction.showModal(modal);
             }
-                break;
-            case 'actions': {
-                const choice = options.getString('options');
-                const messageid = options.getString('message_id');
-                const giveaway = client.giveawaysManager.giveaways.find((g) => g.guildId === interaction.guildId && g.messageId === messageid);
+            break;
 
-                if (!giveaway) {
-                    errorEmbed.setDescription(`Le giveaway avec l'id ${messageid} n'a pas pu être trouvé.`);
-                    return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+            case "manage": {
+                const embed = new EmbedBuilder();
+                const messageId = interaction.options.getString("message_id");
+                const toggle = interaction.options.getString("toggle");
+
+                const data = await DB.findOne({
+                    GuildID: interaction.guild.id,
+                    MessageID: messageId
+                });
+                if (!data) {
+                    embed
+                        .setColor("Red")
+                        .setDescription(`Je n'ai pas trouvé de giveaway avec ce message ID`);
+                    return interaction.reply({ embeds: [embed], ephemeral: true });
                 }
-                switch (choice) {
-                    case 'end': {
-                        client.giveawaysManager.end(messageid).then(() => {
-                            successEmbed.setDescription('Giveaway Fini.');
-                            return interaction.reply({ embeds: [successEmbed], ephemeral: true });
-                        }).catch((err) => {
-                            errorEmbed.setDescription(`Erreur \n\`${err}\``)
-                            return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
-                        });
+
+                const message = (await interaction.guild.channels.cache.get(data.ChannelID).messages.fetch(messageId));
+                if (!message) {
+                    embed
+                        .setColor("Red")
+                        .setDescription(`Ce giveaway n'existe pas.`);
+                    return interaction.reply({ embeds: [embed], ephemeral: true });
+                }
+
+                if (["end", "reroll"].includes(toggle)) {
+                    if (data.Ended === (toggle === "end" ? true : false)) {
+                        embed
+                            .setColor("Red")
+                            .setDescription(`Ce giveaway a ${toggle === "end" ? "déjà terminé" : "non terminé"}`);
+                        return interaction.reply({ embeds: [embed], ephemeral: true });
                     }
-                        break;
-                    case 'pause': {
-                        client.giveawaysManager.pause(messageid).then(() => {
-                            successEmbed.setDescription('Giveaway Mit en Pause');
-                            return interaction.reply({ embeds: [successEmbed], ephemeral: true });
-                        }).catch((err) => {
-                            errorEmbed.setDescription(`Erreur \n\`${err}\``)
-                            return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
-                        });
+
+                    endGiveaway(message, DB, (toggle === "end" ? false : true));
+
+                    embed
+                        .setColor("Green")
+                        .setDescription(`Ce giveaway est ${toggle === "end" ? "fini" : "ont été relancés"}`);
+                    return interaction.reply({ embeds: [embed], ephemeral: true });
+                }
+
+                if (["pause", "unpause"].includes(toggle)) {
+                    if (data.Paused === (toggle === "pause" ? true : false)) {
+                        embed
+                            .setColor("Red")
+                            .setDescription(`Ce giveaway est déja ${toggle === "pause" ? "en pause" : "en cours"}`);
+                        return interaction.reply({ embeds: [embed], ephemeral: true });
                     }
-                        break;
-                    case 'unpause': {
-                        client.giveawaysManager.unpause(messageid).then(() => {
-                            successEmbed.setDescription('Giveaway Reprit');
-                            return interaction.reply({ embeds: [successEmbed], ephemeral: true });
-                        }).catch((err) => {
-                            errorEmbed.setDescription(`Erreur \n\`${err}\``)
-                            return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
-                        });
-                    }
-                        break;
-                    case 'reroll': {
-                        client.giveawaysManager.reroll(messageid).then(() => {
-                            successEmbed.setDescription('Giveaway Reroll');
-                            return interaction.reply({ embeds: [successEmbed], ephemeral: true });
-                        }).catch((err) => {
-                            errorEmbed.setDescription(`Erreur \n\`${err}\``)
-                            return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
-                        });
-                    }
-                        break;
-                    case 'delete': {
-                        client.giveawaysManager.delete(messageid).then(() => {
-                            successEmbed.setDescription('Giveaway Supprimer');
-                            return interaction.reply({ embeds: [successEmbed], ephemeral: true });
-                        }).catch((err) => {
-                            errorEmbed.setDescription(`Erreur \n\`${err}\``)
-                            return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
-                        });
-                    }
-                        break;
+
+                    const button = new ActionRowBuilder().addComponents(
+                        new ButtonBuilder()
+                            .setCustomId("giveaway-join")
+                            .setEmoji("🎉")
+                            .setStyle(ButtonStyle.Success)
+                            .setLabel("Rejoindre ici")
+                            .setDisabled(toggle === "pause" ? true : false)
+                    );
+
+                    const giveawayEmbed = new EmbedBuilder()
+                        .setColor(toggle === "pause" ? "Yellow" : "#156789")
+                        .setTitle(`${data.Prize}`)
+                        .setDescription(`**Créé par**: <@${data.HostedBy}>\n**Gagnant(s)**: ${data.Winners}\n**Fini dans**: <t:${data.EndTime}:R> (<t:${data.EndTime}>)`)
+                        .setTimestamp(parseInt(data.EndTime) * 1000);
+
+                    await DB.findOneAndUpdate({
+                        GuildID: interaction.guild.id,
+                        MessageID: message.id
+                    }, {
+                        Paused: toggle === "pause" ? true : false
+                    });
+                    
+                    await message.edit({ content: `🎉 **Giveaway ${toggle === "pause" ? "En Pause" : "En cours"}** 🎉`, embeds: [giveawayEmbed], components: [button] });
+
+                    embed
+                        .setColor("Green")
+                        .setDescription(`Ce giveaway est déja ${toggle === "pause" ? "en pause" : "en cours"}`);
+                    interaction.reply({ embeds: [embed], ephemeral: true });
+                }
+
+                if (toggle === "delete") {
+                    await DB.deleteOne({
+                        GuildID: interaction.guild.id,
+                        MessageID: message.id
+                    });
+
+                    message.delete();
+                    embed
+                        .setColor("Green")
+                        .setDescription(`Le giveaway a été supprimé`);
+                    interaction.reply({ embeds: [embed], ephemeral: true });
                 }
             }
-                break;
-            default: {
-                console.log('Erreur dans la commande des giveaway');
-            }
+            break;
         }
-    }
-});
+    },
+})
