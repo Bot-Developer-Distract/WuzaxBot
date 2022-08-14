@@ -46,7 +46,7 @@ module.exports = new SlashCommand({
      * @param {ChatInputCommandInteraction} interaction
      * @param {Client} client
      */
-    async execute(interaction, client) {
+    async execute({client, interaction}) {
         const subcommand = interaction.options.getSubcommand();
 
         switch (subcommand) {
