@@ -1,5 +1,5 @@
 const { ButtonInteraction, Client, EmbedBuilder } = require("discord.js");
-const DB = require("../../schemas/GiveawayDB");
+const DB = require("../../Schemas/GiveawayDB");
 
 module.exports = {
     id: "giveaway-join",

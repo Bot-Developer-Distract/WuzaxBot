@@ -1,7 +1,7 @@
 const { Client, EmbedBuilder, ModalSubmitInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const ms = require("ms");
-const DB = require("../../schemas/GiveawayDB");
-const { endGiveaway } = require("../../structure/utils/GiveawayFunctions");
+const DB = require("../../Schemas/GiveawayDB");
+const { endGiveaway } = require("../../Structures/Utils/GiveawayFunctions");
 
 module.exports = {
     id: "giveaway-options",

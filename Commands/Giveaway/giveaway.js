@@ -1,6 +1,6 @@
 const { ChatInputCommandInteraction, Client, EmbedBuilder, TextInputBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandOptionType, ModalBuilder, PermissionsBitField, TextInputStyle, ButtonStyle } = require("discord.js");
-const DB = require("../../../schemas/GiveawayDB");
-const { endGiveaway } = require("../../../structure/utils/GiveawayFunctions");
+const DB = require("../../Schemas/GiveawayDB");
+const { endGiveaway } = require("../../Structures/Utils/GiveawayFunctions");
 const { SlashCommand } = require("discord-commands-params")
 
 module.exports = new SlashCommand({
