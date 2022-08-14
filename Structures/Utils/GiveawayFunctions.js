@@ -31,7 +31,7 @@ async function endGiveaway(message, DB, reroll = false) {
     );
     
     const endGiveawayEmbed = new EmbedBuilder()
-        .setColor("NotQuiteBlack")
+        .setColor("Red")
         .setTitle(`${data.Prize}`)
         .setDescription(`**Créé par**: <@${data.HostedBy}>\n**Gagnant(s)**: ${winnerIdArray.map((user) => `<@${user}>`).join(", ") || "None"} \n**Fini**: <t:${data.EndTime}:R> (<t:${data.EndTime}>)`)
         .setTimestamp(data.EndTime * 1000);
